@@ -4,6 +4,9 @@ package com.ottoluis.MaosAmigas.controller;
 import com.ottoluis.MaosAmigas.exception.RecursoNaoEncontradoException;
 import com.ottoluis.MaosAmigas.models.SuportePsicologico;
 import com.ottoluis.MaosAmigas.repository.SuportePsicologicoRepository;
+import com.ottoluis.MaosAmigas.services.PsicologosService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,15 +15,22 @@ import java.util.List;
 @RequestMapping(value = "/psicologos")
 public class SuportePsicologicoController {
 
-    private final SuportePsicologicoRepository suportePsicologicoRepository;
 
-    public SuportePsicologicoController(SuportePsicologicoRepository suportePsicologicoRepository) {
-        this.suportePsicologicoRepository = suportePsicologicoRepository;
-    }
+    @Autowired
+    private SuportePsicologicoRepository suportePsicologicoRepository;
+
+    @Autowired
+    private PsicologosService psicologosService;
 
     @GetMapping
     public List<SuportePsicologico> listar() {
         return suportePsicologicoRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SuportePsicologico> buscarPorId(@PathVariable Long id){
+        SuportePsicologico suportePsicologico = psicologosService.buscarPorId(id);
+        return ResponseEntity.ok(suportePsicologico);
     }
 
     @PostMapping
@@ -43,6 +53,7 @@ public class SuportePsicologicoController {
         psicologo.setContatoPsicologa(dados.getContatoPsicologa());
         psicologo.setEmailPsicologa(dados.getEmailPsicologa());
         psicologo.setRedeSocial(dados.getRedeSocial());
+        psicologo.setImgUrl(dados.getImgUrl());
 
         return suportePsicologicoRepository.save(psicologo);
     }

@@ -42,11 +42,13 @@ public class SuportePsicologico {
     @Column(name = "rede_social")
     private String redeSocial;
 
+    private String imgUrl;
+
     public SuportePsicologico(){
 
     }
 
-    public SuportePsicologico(Long id, String nomePsicologa, String crp, String especialidade, String sobreMim, String contatoPsicologa, String emailPsicologa, String redeSocial) {
+    public SuportePsicologico(Long id, String nomePsicologa, String crp, String especialidade, String sobreMim, String contatoPsicologa, String emailPsicologa, String redeSocial, String imgUrl) {
         this.id = id;
         this.nomePsicologa = nomePsicologa;
         this.crp = crp;
@@ -55,6 +57,7 @@ public class SuportePsicologico {
         this.contatoPsicologa = contatoPsicologa;
         this.emailPsicologa = emailPsicologa;
         this.redeSocial = redeSocial;
+        this.imgUrl = imgUrl;
     }
 
     public Long getId() {
@@ -121,7 +124,13 @@ public class SuportePsicologico {
         this.redeSocial = redeSocial;
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
 
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 
     @Override
     public boolean equals(Object o) {

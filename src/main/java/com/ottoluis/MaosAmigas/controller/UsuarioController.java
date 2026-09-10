@@ -7,7 +7,10 @@ import com.ottoluis.MaosAmigas.exception.RecursoNaoEncontradoException;
 import com.ottoluis.MaosAmigas.mapper.UsuarioMapper;
 import com.ottoluis.MaosAmigas.models.Usuario;
 import com.ottoluis.MaosAmigas.repository.UsuarioRepository;
+import com.ottoluis.MaosAmigas.services.UsuarioService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,11 +19,11 @@ import java.util.List;
 @RequestMapping(value = "/usuarios")
 public class UsuarioController {
 
-    private final UsuarioRepository usuarioRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
-    public UsuarioController(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
-    }
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping
     public List<UsuarioDTO> findAll() {
@@ -28,6 +31,13 @@ public class UsuarioController {
                 .stream()
                 .map(UsuarioMapper::toDto)
                 .toList();
+    }
+
+    @GetMapping("/{id}") //Buscar por id
+    public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long id){
+        UsuarioDTO dto = usuarioService.buscarPorId(id);
+
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
