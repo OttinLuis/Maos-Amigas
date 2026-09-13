@@ -1,0 +1,8 @@
+$kind: collection
+auth:
+  - id: 882139ab-f23c-42b5-89a7-6db27c3f77a8
+    type: basic
+    name: Basic Auth
+    credentials:
+      username: myclientid
+      password: myclientsecret

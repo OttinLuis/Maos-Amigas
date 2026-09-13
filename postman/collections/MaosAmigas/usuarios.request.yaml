@@ -1,0 +1,24 @@
+$kind: http-request
+url: http://localhost:8080/usuarios
+method: GET
+body:
+  type: json
+  content: |-
+    {
+      "nome": "Teste Login",
+      "email": "teste@email.com",
+      "senha": "123456",
+      "cpf": "12345678900",
+      "dataNascimento": "2000-01-01",
+      "contatoPessoal": "81999999999",
+      "contatoConfianca": "81988888888",
+      "endereco": {
+        "rua": "Rua Teste",
+        "numero": "100",
+        "bairro": "Centro",
+        "cidade": "São José da Laje",
+        "estado": "AL",
+        "cep": "57680000"
+      }
+    }
+order: 2472004014842227

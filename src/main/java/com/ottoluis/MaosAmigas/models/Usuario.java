@@ -4,15 +4,16 @@ import com.ottoluis.MaosAmigas.models.embeddable.Endereco;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "usuario_tb")
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -148,10 +149,38 @@ public class Usuario {
         Usuario usuario = (Usuario) o;
         return Objects.equals(id, usuario.id);
     }
+    public void addRole(Role role){
+        roles.add(role);
+
+    }
+    public boolean hasRole(String roleNome){
+        for (Role role : roles){
+            if (role.getAuthority().equals(roleNome));
+            return true;
+        }
+        return false;
+
+
+    }
 
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public @Nullable String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 }
 

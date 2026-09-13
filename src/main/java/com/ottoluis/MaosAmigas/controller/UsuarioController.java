@@ -11,6 +11,7 @@ import com.ottoluis.MaosAmigas.services.UsuarioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,10 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @GetMapping
     public List<UsuarioDTO> findAll() {
@@ -44,7 +49,7 @@ public class UsuarioController {
     public UsuarioDTO salvar(@Valid @RequestBody CreateUsuarioDTO dto) {
 
         Usuario usuario = UsuarioMapper.toEntity(dto);
-
+        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
         Usuario usuarioSalvo = usuarioRepository.save(usuario);
 
         return UsuarioMapper.toDto(usuarioSalvo);
