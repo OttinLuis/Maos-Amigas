@@ -7,6 +7,7 @@ import com.ottoluis.MaosAmigas.repository.SuportePsicologicoRepository;
 import com.ottoluis.MaosAmigas.services.PsicologosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class SuportePsicologicoController {
         return ResponseEntity.ok(suportePsicologico);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public SuportePsicologico salvar(@RequestBody SuportePsicologico suportePsicologico) {
         return suportePsicologicoRepository.save(suportePsicologico);

@@ -1,23 +1,26 @@
 package com.ottoluis.MaosAmigas.models;
 
 import jakarta.persistence.*;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "role_tb")
-public class Role {
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String autoritzacao; //authority
+    private String authority;
 
-    public Role(){}
+    public Role() {
+    }
 
-    public Role(Long id, String autoritzacao) {
+    public Role(Long id, String authority) {
         this.id = id;
-        this.autoritzacao = autoritzacao;
+        this.authority = authority;
     }
 
     public Long getId() {
@@ -28,12 +31,13 @@ public class Role {
         this.id = id;
     }
 
-    public String getAutoritzacao() {
-        return autoritzacao;
+    @Override
+    public String getAuthority() {
+        return authority;
     }
 
-    public void setAutoritzacao(String autoritzacao) {
-        this.autoritzacao = autoritzacao;
+    public void setAuthority(String authority) {
+        this.authority = authority;
     }
 
     @Override
@@ -47,4 +51,5 @@ public class Role {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }

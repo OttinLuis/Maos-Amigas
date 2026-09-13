@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PsicologosService {
 
+
     @Autowired
     private SuportePsicologicoRepository suportePsicologicoRepository;
 
@@ -17,4 +18,6 @@ public class PsicologosService {
             .orElseThrow(() -> new RecursoNaoEncontradoException("Psicologo", id));
 
         }
+
+
 }

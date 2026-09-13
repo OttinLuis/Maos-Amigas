@@ -4,7 +4,13 @@ package com.ottoluis.MaosAmigas.controller;
 import com.ottoluis.MaosAmigas.exception.RecursoNaoEncontradoException;
 import com.ottoluis.MaosAmigas.models.RedeDeApoio;
 
+import com.ottoluis.MaosAmigas.models.SuportePsicologico;
 import com.ottoluis.MaosAmigas.repository.RedeDeApoioRepository;
+import com.ottoluis.MaosAmigas.repository.SuportePsicologicoRepository;
+import com.ottoluis.MaosAmigas.services.RedeDeApoioService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,17 +19,26 @@ import java.util.List;
 @RequestMapping(value = "/apoio")
 public class RedeDeApoioController {
 
-    private final RedeDeApoioRepository redeDeApoioRepository;
+    @Autowired
+    private RedeDeApoioRepository redeDeApoioRepository;
 
-    public RedeDeApoioController(RedeDeApoioRepository redeDeApoioRepository) {
-        this.redeDeApoioRepository = redeDeApoioRepository;
-    }
+    @Autowired
+    private RedeDeApoioService redeDeApoioService;
+
 
     @GetMapping
     public List<RedeDeApoio> listar() {
         return redeDeApoioRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<RedeDeApoio> buscarPorId(@PathVariable Long id){
+        RedeDeApoio redeDeApoio = redeDeApoioService.buscarPorId(id);
+        return ResponseEntity.ok(redeDeApoio);
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public RedeDeApoio salvar(@RequestBody RedeDeApoio redeDeApoio){
         return redeDeApoioRepository.save(redeDeApoio);
