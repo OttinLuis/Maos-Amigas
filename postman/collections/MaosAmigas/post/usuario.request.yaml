@@ -1,0 +1,24 @@
+$kind: http-request
+url: http://localhost:8080/usuarios
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "nome": "Juliana Santos",
+      "email": "juliana.santos@email.com",
+      "senha": "123456",
+      "cpf": "98765432100",
+      "dataNascimento": "2003-08-15",
+      "contatoPessoal": "82997776666",
+      "contatoConfianca": "82996665555",
+      "endereco": {
+        "rua": "Rua das Flores",
+        "numero": "250",
+        "bairro": "Ponta Verde",
+        "cidade": "Maceio",
+        "estado": "AL",
+        "cep": "57035000"
+      }
+    }
+order: 1789538303697

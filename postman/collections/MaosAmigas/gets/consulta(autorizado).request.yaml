@@ -1,0 +1,8 @@
+$kind: http-request
+url: http://localhost:8080/consulta/4
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 627409023655328

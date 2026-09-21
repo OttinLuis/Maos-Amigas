@@ -1,0 +1,24 @@
+$kind: http-request
+url: http://localhost:8080/usuarios
+method: GET
+body:
+  type: json
+  content: |-
+    {
+      "nome": "Marcos Teste",
+      "email": "marcos@email.com",
+      "senha": "123456",
+      "cpf": "12346789090",
+      "dataNascimento": "2005-01-01",
+      "contatoPessoal": "81999999999",
+      "contatoConfianca": "81988888888",
+      "endereco": {
+        "rua": "Rua Teste",
+        "numero": "100",
+        "bairro": "Centro",
+        "cidade": "Maceio",
+        "estado": "AL",
+        "cep": "57680000"
+      }
+    }
+order: 1789538341323

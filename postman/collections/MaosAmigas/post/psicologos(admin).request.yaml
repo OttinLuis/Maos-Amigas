@@ -1,0 +1,9 @@
+$kind: http-request
+url: http://localhost:8080/psicologos
+method: POST
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+examples: .resources/psicologos(admin).resources/examples
+order: 2553357569870043
