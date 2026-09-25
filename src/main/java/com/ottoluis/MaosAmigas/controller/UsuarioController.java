@@ -8,6 +8,9 @@ import com.ottoluis.MaosAmigas.mapper.UsuarioMapper;
 import com.ottoluis.MaosAmigas.models.Usuario;
 import com.ottoluis.MaosAmigas.repository.UsuarioRepository;
 import com.ottoluis.MaosAmigas.services.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +32,20 @@ public class UsuarioController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuários encontrado com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuários não encontrado"
+            )
+    })
+    @Operation(
+            summary = "Buscar usuário",
+            description = "Realiza Busca de todos usuários."
+    )
 
     @GetMapping
     public List<UsuarioDTO> findAll() {
@@ -38,6 +55,20 @@ public class UsuarioController {
                 .toList();
     }
 
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuário encontrado com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuário não encontrado pelo /{id} informado"
+            )
+    })
+    @Operation(
+            summary = "Buscar usuário por ID",
+            description = "Realiza busca do usuário por ID."
+    )
     @GetMapping("/{id}") //Buscar por id
     public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long id){
         UsuarioDTO dto = usuarioService.buscarPorId(id);
@@ -45,6 +76,25 @@ public class UsuarioController {
         return ResponseEntity.ok(dto);
     }
 
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuário cadastrado com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Dados inválidos"
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "E-mail já cadastrado"
+            )
+    })
+
+    @Operation(
+            summary = "Cadastrar usuário",
+            description = "Realiza o cadastro de um novo usuário no sistema."
+    )
     @PostMapping
     public UsuarioDTO salvar(@Valid @RequestBody CreateUsuarioDTO dto) {
 

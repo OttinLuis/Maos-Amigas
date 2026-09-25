@@ -1,6 +1,7 @@
 package com.ottoluis.MaosAmigas.models;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -17,25 +18,49 @@ public class SuportePsicologico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Schema(
+            description = "Nome do Psicológo",
+            example = "Dr. Mariana"
+    )
     @NotBlank(message = "esse campo não pode ser vazio")
     @Column(name = "nome_psicologa", nullable = false)
     private String nomePsicologa;
 
+
+    @Schema(
+            description = "CRP do Psicológo",
+            example = "CRP 15/12345"
+    )
     @NotBlank(message = "esse campo não pode ser vazio")
     @Column(name = "crp", nullable = false, unique = true)
     private String crp;
 
+    @Schema(
+            description = "Especialidade do Psicológo",
+            example = "Psicologia Escolar e Educacional"
+    )
     @NotBlank(message = "esse campo não pode ser vazio")
     @Column(name = "especialidade")
     private String especialidade;
+
 
     @NotBlank(message = "esse campo não pode ser vazio")
     @Column(name = "sobre_mim", columnDefinition = "TEXT")
     private String sobreMim;
 
+
+    @Schema(
+            description = "Contato do psicológo",
+            example = "(99)99999-9999"
+    )
     @Column(name = "contato_psicologa", nullable = false)
     private String contatoPsicologa;
 
+
+    @Schema(
+            description = "Email do psicológo",
+            example = "dr.manoel@gmail.com"
+    )
     @NotBlank(message = "esse campo não pode ser vazio")
     @Email(message = "Email inválido")
     @Column(name = "email_psicologa", unique = true, nullable = false)
@@ -44,6 +69,10 @@ public class SuportePsicologico {
     @Column(name = "rede_social")
     private String redeSocial;
 
+    @Schema(
+            description = "Imagem do psicológo",
+            example = "https://www.clinicaquartzo.com.br/upload/service/tnfaAhoWsLS99ku20Ua8vgZecpgcJZyqqxh1PzoS.jpeg"
+    )
     private String imgUrl;
 
     public SuportePsicologico(){

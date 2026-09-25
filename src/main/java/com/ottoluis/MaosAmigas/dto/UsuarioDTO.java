@@ -1,14 +1,44 @@
 package com.ottoluis.MaosAmigas.dto;
 
 import com.ottoluis.MaosAmigas.models.embeddable.Endereco;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embedded;
 
 public class UsuarioDTO {
     private Long id;
+
+    @Schema(
+            description = "Nome completo do usuário",
+            example = "Joao da Silva Santos"
+    )
     private String nome;
+
+
+    @Schema(
+            description = "Email do usário",
+            example = "joao@gmail.com"
+    )
     private String email;
+
+
+    @Schema(
+            description = "Data de nascimento do usuário",
+            example = "10/10/2010"
+    )
     private String dataNascimento;
+
+
+    @Schema(
+            description = "Contato do usuário",
+            example = "(99)99999-9999"
+    )
     private String contatoPessoal;
+
+
+    @Schema(
+            description = "Contato de confiança do usário",
+            example = "(99)99999-9999"
+    )
     private String contatoConfianca;
 
     @Embedded

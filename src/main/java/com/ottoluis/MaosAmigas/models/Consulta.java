@@ -1,6 +1,8 @@
 package com.ottoluis.MaosAmigas.models;
 
+import com.ottoluis.MaosAmigas.dto.createDTO.CreateUsuarioDTO;
 import com.ottoluis.MaosAmigas.enums.StatusConsulta;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -27,6 +29,10 @@ public class Consulta {
     @Column(nullable = false)
     private LocalDate data;
 
+    @Schema(
+            description = "Horário da consulta",
+            example = "14:00:00"
+    )
     @Column(nullable = false)
     private LocalTime hora;
 
@@ -34,6 +40,10 @@ public class Consulta {
     @Column(nullable = false)
     private StatusConsulta status;
 
+    @Schema(
+            description = "Observação ou informação adicional da consulta",
+            example = "Primeira consulta de acompanhamento psicológico."
+    )
     @Column(columnDefinition = "TEXT")
     private String observacao;
 

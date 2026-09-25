@@ -1,6 +1,7 @@
 package com.ottoluis.MaosAmigas.models;
 
 import com.ottoluis.MaosAmigas.models.embeddable.Endereco;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -13,7 +14,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "usuario_tb")
-public class Usuario implements UserDetails {
+public class    Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,30 +23,64 @@ public class Usuario implements UserDetails {
     @Embedded
     private Endereco endereco;
 
+    @Schema(
+            description = "CPF do usuário",
+            example = "XXX.XXX.XXX-XX"
+    )
     @Column(unique = true, nullable = false, name = "cpf")
     @NotBlank(message = "esse campo não pode ser vazio")
     private String cpf;
 
+
+    @Schema(
+            description = "Nome completo do usuário",
+            example = "Joao da Silva Santos"
+    )
     @Column(name = "nome", nullable = false)
     @NotBlank(message = "esse campo não pode ser vazio")
     private String nome;
 
+
+    @Schema(
+            description = "Email do usário",
+            example = "joao@gmail.com"
+    )
     @Column(name = "email", unique = true, nullable = false)
     @NotBlank(message = "esse campo não pode ser vazio")
     private String email;
 
+
+    @Schema(
+            description = "Senha do Usuário(Min 6 caracteres)",
+            example = "12@456"
+    )
     @Column(name = "senha", nullable = false)
     @Size(min = 6, message = "esse campo precisa ter no minimo 6 caracteres")
     @NotBlank(message = "esse campo não pode ser vazio")
     private String senha;
 
+
+    @Schema(
+            description = "Data de nascimento do usuário",
+            example = "10/10/2010"
+    )
     @Column(name = "data_nascimento", nullable = false)
     private String dataNascimento;
 
+
+    @Schema(
+            description = "Contato do usuário",
+            example = "(99)99999-9999"
+    )
     @Column(name = "contato_pessoal", nullable = false)
     @NotBlank(message = "esse campo não pode ser vazio")
     private String contatoPessoal;
 
+
+    @Schema(
+            description = "Contato de confiança do usário",
+            example = "(99)99999-9999"
+    )
     @Column(name = "contato_confianca", nullable = false)
     private String contatoConfianca;
 

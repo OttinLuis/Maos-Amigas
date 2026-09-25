@@ -1,6 +1,7 @@
 package com.ottoluis.MaosAmigas.dto.createDTO;
 
 import com.ottoluis.MaosAmigas.models.embeddable.Endereco;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -13,6 +14,7 @@ public class CreateUsuarioDTO {
 
     @Embedded
     private Endereco endereco;
+
 
     @NotBlank(message = "Cpf obrigatorio")
     private String cpf;
@@ -33,12 +35,9 @@ public class CreateUsuarioDTO {
 
     @Column(name = "data_nascimento", nullable = false)
     private String dataNascimento;
-    ;
-
 
     @NotBlank(message = "Contato Pessoal obrigatorio")
     private String contatoPessoal;
-
 
     private String contatoConfianca;
 

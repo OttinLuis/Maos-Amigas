@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class PsicologosService {
 
+    private final SuportePsicologicoRepository suportePsicologicoRepository;
 
-    @Autowired
-    private SuportePsicologicoRepository suportePsicologicoRepository;
+    public PsicologosService(SuportePsicologicoRepository suportePsicologicoRepository) {
+        this.suportePsicologicoRepository = suportePsicologicoRepository;
+    }
 
     public SuportePsicologico buscarPorId(Long id){
         return suportePsicologicoRepository.findById(id)
