@@ -184,11 +184,6 @@ O Mãos Amigas foi desenvolvido como um projeto acadêmico e de portfólio com o
 
 O projeto também serve como experiência prática com APIs REST, bancos de dados relacionais, segurança, arquitetura em camadas e desenvolvimento de aplicações backend.
 
-## Autor
-
-**Otto Luis**
-
-Estudante de Sistemas de Informação com foco em desenvolvimento backend utilizando Java e Spring Boot.
 
 ## Repositório
 
