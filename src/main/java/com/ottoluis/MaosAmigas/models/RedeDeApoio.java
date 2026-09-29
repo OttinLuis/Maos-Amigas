@@ -2,8 +2,10 @@ package com.ottoluis.MaosAmigas.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ottoluis.MaosAmigas.models.embeddable.Endereco;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Entity
@@ -14,10 +16,19 @@ public class RedeDeApoio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "esse campo não pode ser vazio")
+
+    @Schema(
+            description = "Contato do Ong",
+            example = "(99)99999-9999"
+
+    )
     @Column(name = "contato_da_ong", nullable = false)
     private String contatoDaOng;
 
+    @Schema(
+            description = "Nome da Ong",
+            example = "Maos Amigas Ong"
+    )
     @NotBlank(message = "esse campo não pode ser vazio")
     @Column(name = "nome_da_ong", nullable = false)
     private String nomeDaOng;

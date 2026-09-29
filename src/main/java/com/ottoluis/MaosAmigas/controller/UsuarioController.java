@@ -127,6 +127,20 @@ public class UsuarioController {
         return UsuarioMapper.toDto(usuarioAtualizado);
 
     }
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Usuário deletado com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Usuário não encontrado pelo /{id} informado"
+            )
+    })
+    @Operation(
+            summary = "Deletar usuário por ID",
+            description = "Deletar o usuário por ID."
+    )
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
         if (!usuarioRepository.existsById(id)) {
