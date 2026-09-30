@@ -5,6 +5,9 @@ import com.ottoluis.MaosAmigas.exception.RecursoNaoEncontradoException;
 import com.ottoluis.MaosAmigas.models.SuportePsicologico;
 import com.ottoluis.MaosAmigas.repository.SuportePsicologicoRepository;
 import com.ottoluis.MaosAmigas.services.PsicologosService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +31,20 @@ public class SuportePsicologicoController {
         return suportePsicologicoRepository.findAll();
     }
 
+    @ApiResponses({
+        @ApiResponse(
+                responseCode = "200",
+                description = "Psicológo encontrado com sucesso"
+        ),
+        @ApiResponse(
+                responseCode = "404",
+                description = "Psicológo não encontrado pelo /{id} informado"
+        )
+    })
+    @Operation(
+            summary = "Buscar psicológo por ID",
+            description = "Realiza busca do psicológo por ID."
+    )
     @GetMapping("/{id}")
     public ResponseEntity<SuportePsicologico> buscarPorId(@PathVariable Long id){
         SuportePsicologico suportePsicologico = psicologosService.buscarPorId(id);

@@ -8,6 +8,9 @@ import com.ottoluis.MaosAmigas.models.SuportePsicologico;
 import com.ottoluis.MaosAmigas.repository.RedeDeApoioRepository;
 import com.ottoluis.MaosAmigas.repository.SuportePsicologicoRepository;
 import com.ottoluis.MaosAmigas.services.RedeDeApoioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,7 +33,20 @@ public class RedeDeApoioController {
     public List<RedeDeApoio> listar() {
         return redeDeApoioRepository.findAll();
     }
-
+    @ApiResponses({
+        @ApiResponse(
+                responseCode = "200",
+                description = "Apoio encontrado com sucesso"
+        ),
+        @ApiResponse(
+                responseCode = "404",
+                description = "Apoio não encontrado pelo /{id} informado"
+        )
+    })
+    @Operation(
+            summary = "Buscar Apoio por ID",
+            description = "Realiza busca do apoio por ID."
+    )
     @GetMapping("/{id}")
     public ResponseEntity<RedeDeApoio> buscarPorId(@PathVariable Long id){
         RedeDeApoio redeDeApoio = redeDeApoioService.buscarPorId(id);
