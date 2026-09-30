@@ -25,6 +25,8 @@ O projeto foi desenvolvido para conectar profissionais qualificados com o usuár
 * Bean Validation
 * Maven
 * Docker
+* Docker Compose
+* Docker Colima
 * Postman
 
 ## Funcionalidades
