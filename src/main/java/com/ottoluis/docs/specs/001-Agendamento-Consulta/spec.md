@@ -1,33 +1,33 @@
 # Especificação de funcionalidade: [Agendamento de consulta]
 
 **ID:** SPEC-[001]  
-**Status:** On going  
+**Status:** Pendente Validação com o PO
 **Responsáveis:** [Otto Luís, Luiz Felipe, Victor Raphael, Rafael Loureiro, Wellington Perovano]  
-**Última atualização:** [data]
+**Última atualização:** [30/09/2026]
 
 ## 1. Problema e evidências
 
-**Usuário prioritário:** [quem vive o problema]  
-**Situação:** [quando e onde acontece]  
-**Problema:** [barreira observável]  
-**Alternativa atual:** [como a pessoa resolve hoje]  
-**Impacto:** [consequência da dificuldade]  
-**Evidências disponíveis:** [observação, entrevista, registro ou fonte]  
-**Suposições ainda não confirmadas:** [o que pode estar errado]
+**Usuário prioritário:** [Pessoas/pacientes com dificuldade para encontrar bons profissionais de saúde mental.]  
+**Situação:** [No momento em que a pessoa/paciente precisa encontrar um especialista em saúde mental para se consultar.]  
+**Problema:** [Procurar por clinicas ou especialistas pode ser difícil tendo em vista que as informações sobre eles podem estar dispersas, ser extensas e de difícil filtragem quanto a localização, atendimento por plano, valores cobrados, horários de atendimento, etc...]  
+**Alternativa atual:** [Pesquisa manual através da internet e contato direto com clinicas, recomendações de conhecidos]  
+**Impacto:** [Desestimula a pessoa/paciente a buscar o atendimento medico necessário, demora para conseguir o atendimento médico, risco de um atendimento médico de baixa qualidade, risco a saúde mental da pessoa/paciente.]  
+**Evidências disponíveis:** [Documentos institucionais escolhidos pelo professor/PO para compor o banco de dados de clinicas e especialistas em saúde mental cadastrados na aplicação.]  
+**Suposições ainda não confirmadas:** [A funcionalidade reduzirá o tempo necessário para a busca e agendamento de consultas em clinicas e/ou com especialistas de saúde mental ideais para a pessoa/paciente a ser atendida.]
 
 ## 2. Objetivo e resultado esperado
 
-**Objetivo:** [resultado para o usuário, sem escolher tecnologia]  
-**Hipótese:** acreditamos que [capacidade] ajudará [usuário] a [resultado].  
-**Linha de base:** [fluxo atual ou solução simples usada para comparação]  
-**Sinais de sucesso:** [comportamento, métrica ou evidência observável]
+**Objetivo:** [Permitir que a pessoa/paciente encontre uma clinica ou especialista em saúde mental ideal de acordo com as necessidades dela tendo em vista questões de localização, atendimento por plano, valores cobrados, horários de atendimento e outros possíveis fatores de filtragem.]  
+**Hipótese:** acreditamos que o nosso sistema de busca e agendamento com o auxílio de IA ajudará a pessoa/paciente a encontrar uma clinica ou especialista em saúde mental de forma mais rápida e que melhor se enquadre nas necessidades dessa pessoa/paciente.  
+**Linha de base:** [Localizar as informações necessárias para verificação diretamente do banco de dados da aplicação relacionada as clinicas e especialistas cadastradas na aplicação, documentos fornecidos pelo PO]  
+**Sinais de sucesso:** [Toda busca de deve apresentar documento e localização, buscas sem resultados possíveis dentro dos documentos disponíveis não devem receber respostas inventadas, o tempo de resposta deve ser de resposta para as buscas deve ser o mínimo possivel]
 
 ## 3. História prioritária
 
-Como [pessoa], quero [ação], para [resultado].
+Como pessoa/paciente que precisa de um atendimento relacionado a saúde mental, quero ter a capacidade de buscar por clinicas e especialistas de forma mais simples em um só lugar, sendo capaz de filtrar minha busca para um lugar especifico, para clinicas ou especialistas que aceitam planos específicos, para clinicas ou especialistas que atendem de acordo com uma certa faixa de preço e faixa de horário especifico, para conseguir agendar minhas consultas com uma clinica ou especialista que melhor atenda minhas necessidade tanto medicas quanto financeiras, geográficas e de tempo.
 
 **Prioridade:** P1  
-**Teste independente:** [como demonstrar valor mesmo sem as histórias posteriores]
+**Teste independente:** [Cinco buscas com diferentes filtragens preparadas pelo PO, incluindo uma sem resposta no conjunto de documentos das clinicas e especialistas cadastradas na aplicação.]
 
 ## 4. Escopo
 
