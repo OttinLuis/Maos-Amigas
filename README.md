@@ -11,6 +11,8 @@ API REST desenvolvida com Java e Spring Boot para uma plataforma de apoio psicol
 
 O projeto foi desenvolvido com foco em boas práticas de desenvolvimento backend, organização em camadas, persistência de dados, validação e segurança da aplicação.
 
+O Sistema foi desenvolvido para conectar profissionais de alta qualidade, como um portfólio com diversos psicólogos.
+
 ## Tecnologias
 
 * Java 24
