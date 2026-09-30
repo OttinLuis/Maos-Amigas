@@ -1,6 +1,6 @@
 # Mãos Amigas
 
-<img width="600" height="600" alt="logo" src="https://github.com/user-attachments/assets/399727cb-506d-46aa-8adf-047216edf170" />
+<img width="500" height="500" alt="logo" src="https://github.com/user-attachments/assets/399727cb-506d-46aa-8adf-047216edf170" />
 
 
 
