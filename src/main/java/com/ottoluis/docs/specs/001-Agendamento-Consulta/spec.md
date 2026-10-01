@@ -3,7 +3,7 @@
 **ID:** SPEC-[001]  
 **Status:** Pendente Validação com o PO
 **Responsáveis:** [Otto Luís, Luiz Felipe, Victor Raphael, Rafael Loureiro, Wellington Perovano]  
-**Última atualização:** [30/09/2026]
+**Última atualização:** [01/10/2026]
 
 ## 1. Problema e evidências
 
@@ -372,9 +372,9 @@ Como pessoa/paciente que precisa de um atendimento psicológico, quero ter a cap
 
 ## 8. Qualidade, riscos e decisões
 
-**Requisitos de qualidade:** [tempo, segurança, acessibilidade, privacidade ou custo]  
-**Riscos principais:** [erro e consequência]  
-**Mitigações:** [limite, revisão, confirmação ou fallback]  
-**Questões para o PO:** [perguntas que mudam prioridade ou comportamento]  
-**Decisões confirmadas:** [decisão, data e responsável]  
-**Testes relacionados:** [IDs ou links]
+**Requisitos de qualidade:** [Interface utilizável através de teclado e mouse, manter fontes visíveis nas buscas auxiliares da IA, ...]  
+**Riscos principais:** [Uma busca com filtragem indicar uma resposta plausível mas que fuja de algum dos filtros, levando o paciente a agendar uma consulta com um psicólogo que não se adequa as necessidades dele, um paciente agendar uma consulta mas o sistema falhar nesse agendamento e ainda assim mostrar um resultado de sucesso no agendamento]  
+**Mitigações:** [Escopo restrito, resposta baseadas unicamente em fontes, ...]  
+**Questões para o PO:** [Caso haja conflito nos arquivos que informam os psicólogos/clinicas psicológicas cadastradas no sistema, qual arquivo deve prevalecer como oficial, ...]  
+**Decisões confirmadas:** [decisão, data e responsável]  //Não entendi o que seria para colocar aqui, verifiquei o arquivo de exemplo mas essa opção não aparece nele.
+**Testes relacionados:** [T-001 a T-016 correspondem aos critérios CA-001 a CA-016.]
