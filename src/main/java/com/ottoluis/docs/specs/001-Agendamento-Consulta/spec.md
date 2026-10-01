@@ -371,9 +371,20 @@ Como pessoa/paciente que precisa de um atendimento psicológico, quero ter a cap
 **Então** os dados da consulta deverão ser armazenados no banco de dados e permanecer disponíveis para consulta.
 
 ## 8. Qualidade, riscos e decisões
-**Requisitos de qualidade:** [Interface utilizável através de teclado e mouse, manter fontes visíveis nas buscas auxiliares da IA, o sistema deve estar em conformidade com a LGPD, o sistema deverá utilizar controle de acesso baseado em papéis (roles), garantindo que cada usuário possa executar apenas as operações permitidas para seu perfil, o sistema deverá armazenar as senhas dos usuários de forma segura, utilizando algoritmo de hash apropriado, não permitindo o armazenamento de senhas em texto puro, o sistema deverá retornar respostas padronizadas e adequadas para situações de erro, evitando a exposição de informações internas da aplicação, a API deverá possuir documentação das principais operações, endpoints, parâmetros, respostas e requisitos de autenticação, facilitando sua utilização e manutenção, o código-fonte e as alterações estruturais do sistema deverão ser controlados por versionamento, permitindo acompanhar alterações e recuperar versões anteriores quando necessário, o sistema deverá utilizar migrações versionadas para controlar a evolução do banco de dados, permitindo que a estrutura necessária seja reproduzida de forma consistente em diferentes ambientes.]  
+**Requisitos de qualidade:** 
+- Interface utilizável através de teclado e mouse
+- Manter fontes visíveis nas buscas auxiliares da IA
+- O sistema deve estar em conformidade com a LGPD
+- O sistema deverá utilizar controle de acesso baseado em papéis (roles), garantindo que cada usuário possa executar apenas as operações permitidas para seu perfil
+- O sistema deverá armazenar as senhas dos usuários de forma segura, utilizando algoritmo de hash apropriado, não permitindo o armazenamento de senhas em texto puro
+- O sistema deverá retornar respostas padronizadas e adequadas para situações de erro, evitando a exposição de informações internas da aplicação
+- A API deverá possuir documentação das principais operações, endpoints, parâmetros, respostas e requisitos de autenticação, facilitando sua utilização e manutenção
+- O código-fonte e as alterações estruturais do sistema deverão ser controlados por versionamento, permitindo acompanhar alterações e recuperar versões anteriores quando necessário
+- O sistema deverá utilizar migrações versionadas para controlar a evolução do banco de dados, permitindo que a estrutura necessária seja reproduzida de forma consistente em diferentes ambientes
+
 **Riscos principais:** [Uma busca com filtragem indicar uma resposta plausível mas que fuja de algum dos filtros, levando o paciente a agendar uma consulta com um psicólogo que não se adequa as necessidades dele, um paciente agendar uma consulta mas o sistema falhar nesse agendamento e ainda assim mostrar um resultado de sucesso no agendamento]  
 **Mitigações:** [Escopo restrito, resposta baseadas unicamente em fontes, a consulta só mudará o status do agendamento caso o paciente confirme de certeza, a busca só retornará resultados após validar os filtros]  
 **Questões para o PO:** [Caso haja conflito nos arquivos que informam os psicólogos/clinicas psicológicas cadastradas no sistema, qual arquivo deve prevalecer como oficial? Caso ocorra de o paciente confirmar um agendamento e o sistema não registrar esse agendamento, como devemos prosseguir com esse paciente?]  
 **Decisões confirmadas:** [decisão, data e responsável //Não entendi o que seria para colocar aqui, verifiquei o arquivo de exemplo mas essa opção não aparece nele.]
+
 **Testes relacionados:** [T-001 a T-016 correspondem aos critérios CA-001 a CA-016.]
