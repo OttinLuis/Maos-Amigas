@@ -383,7 +383,11 @@ Como pessoa/paciente que precisa de um atendimento psicológico, quero ter a cap
 - O sistema deverá utilizar migrações versionadas para controlar a evolução do banco de dados, permitindo que a estrutura necessária seja reproduzida de forma consistente em diferentes ambientes
 
 **Riscos principais:** [Uma busca com filtragem indicar uma resposta plausível mas que fuja de algum dos filtros, levando o paciente a agendar uma consulta com um psicólogo que não se adequa as necessidades dele, um paciente agendar uma consulta mas o sistema falhar nesse agendamento e ainda assim mostrar um resultado de sucesso no agendamento]  
+
 **Mitigações:** [Escopo restrito, resposta baseadas unicamente em fontes, a consulta só mudará o status do agendamento caso o paciente confirme de certeza, a busca só retornará resultados após validar os filtros]  
+
 **Questões para o PO:** [Caso haja conflito nos arquivos que informam os psicólogos/clinicas psicológicas cadastradas no sistema, qual arquivo deve prevalecer como oficial? Caso ocorra de o paciente confirmar um agendamento e o sistema não registrar esse agendamento, como devemos prosseguir com esse paciente?]  
-**Decisões confirmadas:** [decisão, data e responsável] 
+
+**Decisões confirmadas:** [decisão, data e responsável]                 
+
 **Testes relacionados:** [T-001 a T-016 correspondem aos critérios CA-001 a CA-016.]
