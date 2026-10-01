@@ -372,9 +372,9 @@ Como pessoa/paciente que precisa de um atendimento psicológico, quero ter a cap
 
 ## 8. Qualidade, riscos e decisões
 
-**Requisitos de qualidade:** [Interface utilizável através de teclado e mouse, manter fontes visíveis nas buscas auxiliares da IA, ...]  
+**Requisitos de qualidade:** [Interface utilizável através de teclado e mouse, manter fontes visíveis nas buscas auxiliares da IA, o sistema deve estar em conformidade com a LGPD, ]  
 **Riscos principais:** [Uma busca com filtragem indicar uma resposta plausível mas que fuja de algum dos filtros, levando o paciente a agendar uma consulta com um psicólogo que não se adequa as necessidades dele, um paciente agendar uma consulta mas o sistema falhar nesse agendamento e ainda assim mostrar um resultado de sucesso no agendamento]  
-**Mitigações:** [Escopo restrito, resposta baseadas unicamente em fontes, ...]  
-**Questões para o PO:** [Caso haja conflito nos arquivos que informam os psicólogos/clinicas psicológicas cadastradas no sistema, qual arquivo deve prevalecer como oficial, ...]  
+**Mitigações:** [Escopo restrito, resposta baseadas unicamente em fontes, a consulta só mudará o status do agendamento caso o paciente confirme de certeza, a busca só retornará resultados após validar os filtros]  
+**Questões para o PO:** [Caso haja conflito nos arquivos que informam os psicólogos/clinicas psicológicas cadastradas no sistema, qual arquivo deve prevalecer como oficial? Caso ocorra de o paciente confirmar um agendamento e o sistema não registrar esse agendamento, como devemos prosseguir com esse paciente?]  
 **Decisões confirmadas:** [decisão, data e responsável]  //Não entendi o que seria para colocar aqui, verifiquei o arquivo de exemplo mas essa opção não aparece nele.
 **Testes relacionados:** [T-001 a T-016 correspondem aos critérios CA-001 a CA-016.]
