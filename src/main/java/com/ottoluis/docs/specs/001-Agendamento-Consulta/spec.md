@@ -49,8 +49,6 @@ Como pessoa/paciente que precisa de um atendimento psicológico, quero ter a cap
 - [Os pacientes não poderá acessar dados quanto as consultas de outros pacientes.]
 - [Os paciente não poderá cadastrar clinicas psicológicas ou psicólogos.]
 
-## 5. Entradas, saídas e fluxo
-
 *
 ## 5. Entradas, saídas e fluxo
 
@@ -222,25 +220,155 @@ Como pessoa/paciente que precisa de um atendimento psicológico, quero ter a cap
 - [serviço indisponível]
 - [limite de segurança]
 
-## 6. Requisitos funcionais
+## 6. Requisitos Funcionais
 
-- **RF-001:** O sistema deverá [comportamento observável].
-- **RF-002:** Quando [evento], o sistema deverá [resposta].
-- **RF-003:** Enquanto [estado], o sistema deverá [resposta].
+**RF-001:** O sistema deverá permitir que o usuário realize seu cadastro informando seus dados pessoais e credenciais de acesso.
 
-## 7. Critérios de aceitação
+**RF-002:** Quando o usuário informar credenciais válidas, o sistema deverá realizar sua autenticação e permitir o acesso às funcionalidades correspondentes ao seu perfil.
 
-### CA-001 — [nome do cenário]
+**RF-003:** Quando o usuário informar credenciais inválidas, o sistema deverá rejeitar a autenticação e informar que os dados de acesso são inválidos.
 
-**Dado** [estado inicial]  
-**Quando** [evento ou ação]  
-**Então** [resultado observável]
+**RF-004:** O sistema deverá permitir que usuários autenticados consultem os psicólogos disponíveis para atendimento.
 
-### CA-002 — [nome do cenário de falha]
+**RF-005:** O sistema deverá permitir que o usuário consulte as informações dos psicólogos cadastrados, incluindo dados profissionais e registro no CRP.
 
-**Dado** [estado inicial]  
-**Quando** [evento ou ação]  
-**Então** [resposta segura e observável]
+**RF-006:** Quando o usuário selecionar um psicólogo, o sistema deverá permitir a consulta das datas e horários disponíveis para atendimento.
+
+**RF-007:** O sistema deverá permitir que o usuário agende uma consulta com um psicólogo em uma data e horário disponíveis.
+
+**RF-008:** Quando uma consulta for agendada, o sistema deverá registrar o usuário, o psicólogo, a data, o horário e o status da consulta.
+
+**RF-009:** O sistema deverá atribuir o status **AGENDADA** às novas consultas.
+
+**RF-010:** O sistema deverá permitir que o usuário consulte suas consultas agendadas e seus respectivos status.
+
+**RF-011:** Quando uma consulta possuir um link de atendimento, o sistema deverá disponibilizar o link ao usuário autorizado.
+
+**RF-012:** O sistema deverá permitir o registro de informações adicionais relacionadas à consulta, quando aplicável.
+
+**RF-013:** O sistema deverá permitir que usuários autorizados alterem o status de uma consulta conforme as regras definidas pelo sistema.
+
+**RF-014:** O sistema deverá impedir o agendamento de uma consulta em horário que não esteja disponível para o psicólogo.
+
+**RF-015:** O sistema deverá impedir o cadastro de mais de um psicólogo utilizando o mesmo número de CRP.
+
+**RF-016:** O sistema deverá impedir o cadastro de mais de um usuário utilizando o mesmo endereço de e-mail.
+
+**RF-017:** O sistema deverá permitir que usuários com perfil administrativo gerenciem os dados dos psicólogos cadastrados.
+
+**RF-018:** O sistema deverá permitir que usuários com perfil administrativo consultem e gerenciem as consultas registradas no sistema.
+
+**RF-019:** Quando uma requisição exigir autenticação, o sistema deverá verificar as credenciais e permissões do usuário antes de permitir o acesso ao recurso.
+
+**RF-020:** Quando um usuário autenticado tentar acessar um recurso sem a permissão necessária, o sistema deverá negar o acesso ao recurso.
+
+**RF-021:** O sistema deverá disponibilizar uma API REST para comunicação entre o sistema e seus clientes.
+
+**RF-022:** O sistema deverá utilizar JSON para representar os dados enviados e recebidos pela API.
+
+**RF-023:** O sistema deverá validar os dados recebidos nas operações de cadastro, atualização e agendamento antes de persistí-los no banco de dados.
+
+**RF-024:** Quando ocorrer uma operação inválida, o sistema deverá retornar uma resposta HTTP compatível com o tipo de erro ocorrido.
+
+---
+
+## 7. Critérios de Aceitação
+
+### CA-001 — Cadastro de usuário
+
+**Dado** que o usuário esteja na tela de cadastro  
+**Quando** informar todos os dados obrigatórios válidos e confirmar o cadastro  
+**Então** o sistema deverá criar o usuário e permitir sua autenticação.
+
+### CA-002 — Cadastro com e-mail existente
+
+**Dado** que já exista um usuário cadastrado com determinado e-mail  
+**Quando** outro usuário tentar utilizar o mesmo e-mail  
+**Então** o sistema deverá rejeitar o cadastro e informar que o e-mail já está cadastrado.
+
+### CA-003 — Autenticação válida
+
+**Dado** que o usuário possua uma conta cadastrada  
+**Quando** informar e-mail e senha válidos  
+**Então** o sistema deverá autenticar o usuário e permitir o acesso aos recursos autorizados.
+
+### CA-004 — Autenticação inválida
+
+**Dado** que o usuário esteja na tela de login  
+**Quando** informar credenciais inválidas  
+**Então** o sistema deverá rejeitar a autenticação e impedir o acesso aos recursos protegidos.
+
+### CA-005 — Consulta de psicólogos
+
+**Dado** que o usuário esteja autenticado  
+**Quando** solicitar a lista de psicólogos  
+**Então** o sistema deverá retornar os psicólogos cadastrados e suas informações profissionais.
+
+### CA-006 — Visualização de psicólogo
+
+**Dado** que exista um psicólogo cadastrado  
+**Quando** o usuário solicitar suas informações  
+**Então** o sistema deverá apresentar os dados profissionais disponíveis, incluindo o CRP.
+
+### CA-007 — Consulta de disponibilidade
+
+**Dado** que o usuário tenha selecionado um psicólogo  
+**Quando** solicitar seus horários disponíveis  
+**Então** o sistema deverá apresentar as datas e horários disponíveis para agendamento.
+
+### CA-008 — Agendamento de consulta
+
+**Dado** que exista um horário disponível para determinado psicólogo  
+**Quando** o usuário selecionar a data e o horário e confirmar o agendamento  
+**Então** o sistema deverá registrar a consulta e atribuir o status **AGENDADA**.
+
+### CA-009 — Agendamento em horário indisponível
+
+**Dado** que determinado horário esteja ocupado ou indisponível  
+**Quando** o usuário tentar realizar um agendamento nesse horário  
+**Então** o sistema deverá rejeitar a operação e informar que o horário não está disponível.
+
+### CA-010 — Consulta das consultas do usuário
+
+**Dado** que o usuário possua consultas registradas  
+**Quando** solicitar suas consultas  
+**Então** o sistema deverá apresentar as consultas vinculadas ao usuário, incluindo data, horário, psicólogo e status.
+
+### CA-011 — Acesso ao atendimento online
+
+**Dado** que uma consulta possua um link de atendimento  
+**Quando** o usuário autorizado acessar os dados da consulta  
+**Então** o sistema deverá disponibilizar o link correspondente.
+
+### CA-012 — CRP duplicado
+
+**Dado** que já exista um psicólogo cadastrado com determinado CRP  
+**Quando** um usuário autorizado tentar cadastrar outro psicólogo com o mesmo CRP  
+**Então** o sistema deverá rejeitar o cadastro.
+
+### CA-013 — Acesso administrativo
+
+**Dado** que o usuário possua perfil administrativo  
+**Quando** acessar uma funcionalidade exclusiva de administração  
+**Então** o sistema deverá permitir o acesso conforme suas permissões.
+
+### CA-014 — Acesso não autorizado
+
+**Dado** que o usuário esteja autenticado, mas não possua a permissão necessária  
+**Quando** tentar acessar uma funcionalidade restrita  
+**Então** o sistema deverá negar o acesso.
+
+### CA-015 — Validação de dados
+
+**Dado** que o usuário esteja realizando uma operação de cadastro ou agendamento  
+**Quando** enviar dados obrigatórios inválidos ou incompletos  
+**Então** o sistema deverá rejeitar a operação e informar os dados que precisam ser corrigidos.
+
+### CA-016 — Persistência da consulta
+
+**Dado** que uma consulta tenha sido agendada com sucesso  
+**Quando** o sistema concluir o processamento  
+**Então** os dados da consulta deverão ser armazenados no banco de dados e permanecer disponíveis para consulta.
 
 ## 8. Qualidade, riscos e decisões
 

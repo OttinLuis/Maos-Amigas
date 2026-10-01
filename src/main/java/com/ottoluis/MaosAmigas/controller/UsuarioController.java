@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -69,6 +70,7 @@ public class UsuarioController {
             summary = "Buscar usuário por ID",
             description = "Realiza busca do usuário por ID."
     )
+
     @GetMapping("/{id}") //Buscar por id
     public ResponseEntity<UsuarioDTO> buscarPorId(@PathVariable Long id){
         UsuarioDTO dto = usuarioService.buscarPorId(id);
@@ -95,6 +97,7 @@ public class UsuarioController {
             summary = "Cadastrar usuário",
             description = "Realiza o cadastro de um novo usuário no sistema."
     )
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public UsuarioDTO salvar(@Valid @RequestBody CreateUsuarioDTO dto) {
 
@@ -105,6 +108,7 @@ public class UsuarioController {
         return UsuarioMapper.toDto(usuarioSalvo);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public UsuarioDTO atualizar(
             @PathVariable Long id,
@@ -141,6 +145,7 @@ public class UsuarioController {
             summary = "Deletar usuário por ID",
             description = "Deletar o usuário por ID."
     )
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
         if (!usuarioRepository.existsById(id)) {

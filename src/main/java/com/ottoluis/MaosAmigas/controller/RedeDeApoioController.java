@@ -60,6 +60,8 @@ public class RedeDeApoioController {
         return redeDeApoioRepository.save(redeDeApoio);
     }
 
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public RedeDeApoio atualizar(
             @PathVariable Long id,
@@ -74,6 +76,8 @@ public class RedeDeApoioController {
 
         return redeDeApoioRepository.save(apoio);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
         if (!redeDeApoioRepository.existsById(id)) {

@@ -26,6 +26,7 @@ public class SuportePsicologicoController {
     @Autowired
     private PsicologosService psicologosService;
 
+
     @GetMapping
     public List<SuportePsicologico> listar() {
         return suportePsicologicoRepository.findAll();
@@ -45,6 +46,7 @@ public class SuportePsicologicoController {
             summary = "Buscar psicológo por ID",
             description = "Realiza busca do psicológo por ID."
     )
+
     @GetMapping("/{id}")
     public ResponseEntity<SuportePsicologico> buscarPorId(@PathVariable Long id){
         SuportePsicologico suportePsicologico = psicologosService.buscarPorId(id);
@@ -57,6 +59,7 @@ public class SuportePsicologicoController {
         return suportePsicologicoRepository.save(suportePsicologico);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public SuportePsicologico atualizar(
             @PathVariable Long id,
@@ -77,6 +80,7 @@ public class SuportePsicologicoController {
         return suportePsicologicoRepository.save(psicologo);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
         if (!suportePsicologicoRepository.existsById(id)) {
