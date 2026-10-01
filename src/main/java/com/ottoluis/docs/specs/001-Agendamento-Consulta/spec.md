@@ -51,9 +51,163 @@ Como pessoa/paciente que precisa de um atendimento psicológico, quero ter a cap
 
 ## 5. Entradas, saídas e fluxo
 
-**Entradas:** [dados fornecidos pelo usuário ou por sistemas]  
-**Saídas:** [resultado observável]  
-**Precondições:** [estado necessário]
+*
+## 5. Entradas, saídas e fluxo
+
+### Entradas
+
+- Dados de cadastro do usuário:
+    - Nome
+    - E-mail
+    - Senha
+    - CPF
+    - Data de nascimento
+    - Endereço
+    - Contato
+    - Contato de confiança
+- Dados dos psicólogos:
+    - Nome
+    - CRP
+    - Especialidade
+    - Contato
+    - Rede Social
+    - Informações profissionais
+- Dados das consultas:
+    - Usuário
+    - Psicólogo
+    - Data
+    - Horário
+    - Status
+    - Observação
+    - Link de atendimento
+- Credenciais de autenticação:
+    - E-mail
+    - Senha
+    - Token JWT
+- Requisições realizadas pela aplicação web ou por clientes da API.
+
+### Saídas
+
+- Cadastro e autenticação de usuários.
+- Listagem de psicólogos disponíveis.
+- Consulta de informações dos psicólogos.
+- Agendamento de consultas.
+- Atualização do status das consultas.
+- Informações sobre consultas agendadas.
+- Geração e validação de token JWT.
+- Respostas HTTP em formato JSON.
+- Link para atendimento psicológico online.
+- Mensagens de erro e validação quando uma operação não pode ser realizada.
+
+### Precondições
+
+- A aplicação deve estar em execução.
+- O banco de dados PostgreSQL deve estar disponível.
+- O usuário deve estar autenticado para acessar funcionalidades protegidas.
+- Os dados enviados devem respeitar as regras de validação da aplicação.
+- Para realizar uma consulta, deve existir um usuário e um psicólogo válidos.
+- Para realizar um agendamento, os dados de data e horário devem ser válidos.
+
+---
+
+## Fluxo principal
+
+1. **Usuário acessa a aplicação**
+    - O sistema disponibiliza as funcionalidades de cadastro, login, consulta de psicólogos e gerenciamento de consultas.
+
+2. **Usuário realiza o cadastro**
+    - O sistema recebe os dados pessoais e credenciais.
+    - Os dados são validados.
+    - A senha é armazenada de forma segura utilizando criptografia/hash.
+    - O usuário é registrado no banco de dados.
+
+3. **Usuário realiza o login**
+    - O sistema recebe e-mail e senha.
+    - As credenciais são verificadas.
+    - Caso sejam válidas, o sistema gera um token JWT.
+    - O token é utilizado para autenticar as próximas requisições.
+
+4. **Usuário consulta os psicólogos**
+    - O sistema recebe a requisição autenticada.
+    - Busca os psicólogos cadastrados.
+    - Retorna as informações disponíveis em formato JSON.
+
+5. **Usuário seleciona um psicólogo**
+    - O sistema recebe a identificação do psicólogo.
+    - Verifica se o psicólogo existe.
+    - Disponibiliza as informações necessárias para a realização do agendamento.
+
+6. **Usuário agenda uma consulta**
+    - O sistema recebe o psicólogo, data, horário e demais informações da consulta.
+    - Valida os dados enviados.
+    - Registra a consulta no banco de dados.
+    - A consulta é criada com seu respectivo status.
+    - O sistema retorna os dados da consulta criada.
+
+7. **Usuário consulta seus agendamentos**
+    - O sistema identifica o usuário autenticado.
+    - Busca suas consultas cadastradas.
+    - Retorna as consultas e seus respectivos dados.
+
+8. **Usuário acessa o atendimento**
+    - Quando disponível, o sistema fornece o link de atendimento associado à consulta.
+    - O usuário pode utilizar o link para realizar o atendimento psicológico online.
+
+---
+
+## Alternativas e erros
+
+### Ausência de informação
+
+- Caso um campo obrigatório não seja informado, o sistema rejeita a requisição.
+- O sistema retorna uma mensagem indicando os dados necessários para concluir a operação.
+
+### Entrada inválida
+
+- Caso os dados enviados não estejam de acordo com as regras de validação, a operação não é realizada.
+- O sistema retorna uma resposta de erro informando a inconsistência encontrada.
+
+### Usuário não autenticado
+
+- Caso o usuário tente acessar um recurso protegido sem autenticação válida, o sistema bloqueia a requisição.
+- É retornado o status HTTP `401 Unauthorized`.
+
+### Usuário sem permissão
+
+- Caso o usuário esteja autenticado, mas não possua a permissão necessária para acessar determinado recurso, o sistema bloqueia a operação.
+- É retornado o status HTTP `403 Forbidden`.
+
+### Recurso inexistente
+
+- Caso o usuário solicite um psicólogo, usuário ou consulta que não exista, o sistema informa que o recurso não foi encontrado.
+- É retornado o status HTTP `404 Not Found`.
+
+### E-mail já cadastrado
+
+- Caso o usuário tente realizar um cadastro utilizando um e-mail já existente, o sistema rejeita a operação.
+- Uma mensagem informa que o e-mail já está cadastrado.
+
+### Credenciais inválidas
+
+- Caso o e-mail ou senha informados no login estejam incorretos, o sistema não gera o token JWT.
+- A autenticação é recusada.
+
+### Serviço indisponível
+
+- Caso o banco de dados ou outro componente necessário esteja indisponível, a operação não é concluída.
+- O sistema retorna uma resposta de erro apropriada e registra o problema para análise.
+
+### Consulta inválida
+
+- Caso os dados da consulta sejam inválidos ou estejam incompletos, o agendamento não é realizado.
+- O sistema informa quais dados precisam ser corrigidos.
+
+### Limite de segurança
+
+- Endpoints protegidos exigem autenticação por JWT.
+- As permissões de acesso são controladas de acordo com o perfil do usuário.
+- Senhas não são armazenadas em texto puro.
+- Dados inválidos ou requisições não autorizadas são rejeitados antes de executar operações protegidas.
 
 ### Fluxo principal
 
