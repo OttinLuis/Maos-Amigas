@@ -372,7 +372,79 @@ Como pessoa/paciente que precisa de um atendimento psicológico, quero ter a cap
 
 ## 8. Qualidade, riscos e decisões
 
-**Requisitos de qualidade:** [Interface utilizável através de teclado e mouse, manter fontes visíveis nas buscas auxiliares da IA, o sistema deve estar em conformidade com a LGPD, ]  
+*## 8. Requisitos de qualidade
+
+### RQ-001 — Segurança
+
+O sistema deverá proteger os dados dos usuários, psicólogos e consultas por meio de autenticação e autorização, impedindo que usuários não autorizados acessem recursos restritos.
+
+### RQ-002 — Controle de acesso
+
+O sistema deverá utilizar controle de acesso baseado em papéis (roles), garantindo que cada usuário possa executar apenas as operações permitidas para seu perfil.
+
+### RQ-003 — Proteção de credenciais
+
+O sistema deverá armazenar as senhas dos usuários de forma segura, utilizando algoritmo de hash apropriado, não permitindo o armazenamento de senhas em texto puro.
+
+### RQ-004 — Integridade dos dados
+
+O sistema deverá garantir a integridade dos dados armazenados no banco de dados por meio de restrições, validações e relacionamentos entre as entidades.
+
+### RQ-005 — Consistência do banco de dados
+
+O sistema deverá utilizar migrações versionadas para controlar a evolução do banco de dados, permitindo que a estrutura necessária seja reproduzida de forma consistente em diferentes ambientes.
+
+### RQ-006 — Disponibilidade
+
+O sistema deverá permanecer disponível para utilização durante o período de operação previsto, tratando falhas de forma controlada e evitando interrupções desnecessárias.
+
+### RQ-007 — Desempenho
+
+O sistema deverá processar as operações da API em tempo adequado, evitando consultas ou operações desnecessariamente complexas que possam comprometer a experiência do usuário.
+
+### RQ-008 — Escalabilidade
+
+A arquitetura do sistema deverá permitir a evolução da aplicação e o aumento da quantidade de usuários e consultas sem exigir alterações estruturais significativas.
+
+### RQ-009 — Manutenibilidade
+
+O código deverá ser organizado em camadas e componentes com responsabilidades bem definidas, facilitando a manutenção, correção de erros e implementação de novas funcionalidades.
+
+### RQ-010 — Testabilidade
+
+O sistema deverá possuir uma arquitetura que permita a realização de testes automatizados sobre suas principais regras de negócio e componentes.
+
+### RQ-011 — Portabilidade
+
+O sistema deverá ser executável em diferentes ambientes compatíveis por meio de containerização, reduzindo a dependência de configurações específicas da máquina do desenvolvedor.
+
+### RQ-012 — Compatibilidade
+
+A API deverá utilizar padrões HTTP e formatos de comunicação amplamente utilizados, como JSON, permitindo sua integração com diferentes aplicações cliente.
+
+### RQ-013 — Observabilidade
+
+O sistema deverá registrar informações relevantes de execução e erros da aplicação, permitindo identificar problemas e auxiliar no processo de manutenção.
+
+### RQ-014 — Usabilidade
+
+As funcionalidades disponibilizadas pelo sistema deverão possuir fluxos claros e respostas compreensíveis, permitindo que os usuários realizem suas operações sem conhecimento técnico sobre a implementação.
+
+### RQ-015 — Tratamento de erros
+
+O sistema deverá retornar respostas padronizadas e adequadas para situações de erro, evitando a exposição de informações internas da aplicação.
+
+### RQ-016 — Documentação da API
+
+A API deverá possuir documentação das principais operações, endpoints, parâmetros, respostas e requisitos de autenticação, facilitando sua utilização e manutenção.
+
+### RQ-017 — Versionamento
+
+O código-fonte e as alterações estruturais do sistema deverão ser controlados por versionamento, permitindo acompanhar alterações e recuperar versões anteriores quando necessário.
+
+### RQ-018 — Evolução do sistema
+
+A arquitetura deverá permitir a inclusão de novas funcionalidades, como novos recursos de atendimento, funcionalidades administrativas e integrações externas, sem comprometer as funcionalidades existentes. 
 **Riscos principais:** [Uma busca com filtragem indicar uma resposta plausível mas que fuja de algum dos filtros, levando o paciente a agendar uma consulta com um psicólogo que não se adequa as necessidades dele, um paciente agendar uma consulta mas o sistema falhar nesse agendamento e ainda assim mostrar um resultado de sucesso no agendamento]  
 **Mitigações:** [Escopo restrito, resposta baseadas unicamente em fontes, a consulta só mudará o status do agendamento caso o paciente confirme de certeza, a busca só retornará resultados após validar os filtros]  
 **Questões para o PO:** [Caso haja conflito nos arquivos que informam os psicólogos/clinicas psicológicas cadastradas no sistema, qual arquivo deve prevalecer como oficial? Caso ocorra de o paciente confirmar um agendamento e o sistema não registrar esse agendamento, como devemos prosseguir com esse paciente?]  
