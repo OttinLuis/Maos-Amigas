@@ -3,10 +3,6 @@
 <img width="500" height="500" alt="logo" src="https://github.com/user-attachments/assets/399727cb-506d-46aa-8adf-047216edf170" />
 
 
-
-
-
-
 API REST desenvolvida com Java e Spring Boot para uma plataforma de apoio psicológico, conectando usuários a profissionais da área de psicologia e permitindo o gerenciamento de consultas.
 
 O projeto foi desenvolvido com foco em boas práticas de desenvolvimento backend, organização em camadas, persistência de dados, validação e segurança da aplicação.
