@@ -3,53 +3,62 @@
 **ID:** SPEC-[001]  
 **Status:** Pendente Validação com o PO
 **Responsáveis:** [Otto Luís, Luiz Felipe, Victor Raphael, Rafael Loureiro, Wellington Perovano]  
-**Última atualização:** [01/10/2026]
+**Última atualização:** [08/10/2026]
 
 ## 1. Problema e evidências
 
-**Usuário prioritário:** [Pessoas/pacientes que necessitam ou tem interesse em receber tratamento psicológico.]  
-**Situação:** [A pessoa/paciente precisa encontrar um psicólogo para se consultar que se encaixe dentro das necessidades dela, podendo ser necessidades geográficas, financeiras e de tempo.]  
-**Problema:** [Procurar por clinicas psicológicas ou psicólogos pode ser difícil tendo em vista que as informações sobre eles podem estar dispersas, ser extensas e de difícil filtragem quanto a localização, atendimento por plano, valores cobrados, horários de atendimento e especialidades.]  
-**Alternativa atual:** [Pesquisa manual através da internet e contato direto com clinicas psicológicas, recomendações de conhecidos.]  
-**Impacto:** [Desestimula a pessoa/paciente a buscar o atendimento medico necessário, demora para conseguir o atendimento médico, risco de um atendimento médico de baixa qualidade, risco a saúde mental da pessoa/paciente.]  
-**Evidências disponíveis:** [Documentos institucionais escolhidos pelo professor/PO para compor o banco de dados de clinicas psicológicas e psicólogos cadastrados na aplicação.]  
-**Suposições ainda não confirmadas:** [A funcionalidade reduzirá o tempo necessário para a busca e agendamento de consultas em clinicas psicológicas ou com psicólogos, ideais para as necessidades da pessoa/paciente a ser atendida.]
+**Usuário prioritário:** [Pessoas que buscam atendimento psicológico e profissionais de psicologia que oferecem atendimento online.]  
+**Situação:** [Ocorre quando o usuário necessita de suporte psicológico e precisa encontrar um profissional disponível, consultar informações sobre o atendimento e realizar o agendamento de uma consulta de forma acessível e organizada.]  
+**Problema:** [Existe dificuldade em centralizar a busca por profissionais, a consulta de disponibilidade e o agendamento de atendimentos psicológicos em um único fluxo.]  
+**Alternativa atual:** [O usuário pode recorrer a pesquisas em diferentes plataformas, redes sociais, contatos diretos com profissionais ou serviços especializados, realizando etapas de busca e agendamento de maneira descentralizada.]  
+**Impacto:** [A dificuldade de encontrar um profissional adequado e realizar o agendamento pode tornar o acesso ao atendimento mais demorado, dificultando a conexão entre usuários e psicólogos.]  
+**Evidências disponíveis:** [Observação do processo de busca e agendamento de serviços de atendimento psicológico online, análise das necessidades dos usuários e levantamento dos requisitos funcionais do sistema.]  
+**Suposições ainda não confirmadas:** [A centralização das informações dos profissionais e do processo de agendamento pode reduzir o tempo e a dificuldade necessários para encontrar e marcar uma consulta.]
 
 ## 2. Objetivo e resultado esperado
 
-**Objetivo:** [Permitir que a pessoa/paciente encontre uma clinica psicológica ou psicólogo ideal de acordo com as necessidades dela tendo em vista questões de localização, atendimento por plano, valores cobrados, horários de atendimento e especialidades.]  
-**Hipótese:** [Acreditamos que o nosso sistema de busca e agendamento com o auxílio de IA ajudará a pessoa/paciente a encontrar uma clinica psicológica ou psicólogo de forma mais rápida e que melhor se enquadre nas necessidades dessa pessoa/paciente.] 
-**Linha de base:** [Localizar as informações necessárias para verificação diretamente no banco de dados da aplicação relacionada as clinicas psicológicas e psicólogos cadastrados na aplicação, documentos fornecidos pelo PO.]  
-**Sinais de sucesso:** [Toda busca de deve apresentar documento e localização, buscas sem resultados possíveis dentro dos documentos disponíveis não devem receber respostas inventadas, o tempo de resposta para as buscas deve ser o mínimo possivel.]
+**Objetivo:** [Facilitar o acesso a profissionais de psicologia e tornar o processo de busca e agendamento de consultas psicológicas online mais simples, organizado e acessível.]  
+**Hipótese:** [Acreditamos que disponibilizar, em um único ambiente, informações sobre profissionais e recursos para agendamento ajudará os usuários a encontrar atendimento psicológico com maior facilidade e concluir o processo de marcação de consultas de forma mais eficiente.] 
+**Linha de base:** [Atualmente, o usuário pode precisar pesquisar profissionais em diferentes canais, verificar disponibilidade por meios distintos e realizar o agendamento diretamente com o profissional ou por plataformas separadas.]  
+**Sinais de sucesso:** [O usuário consegue localizar um profissional, consultar suas informações e realizar o agendamento de uma consulta seguindo um fluxo simples, sem depender de múltiplos canais para concluir essas etapas.]
 
 ## 3. História prioritária
 
-Como pessoa/paciente que precisa de um atendimento psicológico, quero ter a capacidade de buscar por clinicas psicológicas e psicólogos de forma mais simples em um só lugar, sendo capaz de filtrar minha busca para um lugar especifico, que aceite planos específicos, que atenda de acordo com uma certa faixa de preço, que atenda de acordo com uma certa faixa de horário, e que possua certas especialidades, para dessa forma conseguir agendar minhas consultas com uma clinica psicológica ou psicólogo que melhor atenda minhas necessidade tanto medicas quanto financeiras, geográficas e de tempo.
+Como usuário que busca atendimento psicológico, quero encontrar profissionais disponíveis e agendar uma consulta online, para conseguir acesso ao atendimento psicológico de forma simples e organizada.
 
 **Prioridade:** P1  
-**Teste independente:** [Cinco buscas com diferentes filtragens preparadas pelo PO, incluindo uma sem resposta no conjunto de documentos das clinicas e especialistas cadastradas na aplicação.]
+**Teste independente:** [O valor da história pode ser demonstrado quando um usuário consegue, de forma independente, consultar os profissionais disponíveis e concluir o agendamento de uma consulta, mesmo que funcionalidades complementares do sistema ainda não estejam implementadas.]
 
 ## 4. Escopo
 
 ### Incluído
  
-- [Capacidade de filtrar as buscas por clinicas/especialistas em localização geográfica, se aceitam plano, custo cobrado (Caso seja particular), horários de atendimento, especialidades.]
-- [Permitir que o paciente agende a consulta antecipadamente, assim como cancelar consultas desde de que de ao menos 24 horas antes.]
-- [Informar a fonte da clinica/especialista resultante de uma busca para o usuário checar informações diretamente se desejar, utilizando estritamente as informações do documento de clinicas e especialistas cadastradas na aplicação que foram disponibilizados pelo PO.]
-- [Informar de formar clara quando não houver uma clinica ou especialista que se encaixe nos padrões de filtragem informados na busca.]
-- [A aplicação apenas funcionará em português brasileiro]
-- [A aplicação é feita especificamente para pessoas/pacientes que precisam ou tem interesse em receber acompanhamento médico para saúde mental e suas áreas especificas.]
+- Cadastro e autenticação de usuários para acesso às funcionalidades do sistema.
+- Consulta das informações dos profissionais de psicologia disponíveis na plataforma.
+- Visualização dos dados relevantes dos psicólogos, incluindo informações profissionais e registro no CRP.
+- Agendamento de consultas psicológicas conforme a disponibilidade cadastrada.
+- Registro e gerenciamento das consultas realizadas pelo usuário.
+- Definição e acompanhamento do status das consultas, como AGENDADA e CONFIRMADA.
+- Disponibilização do link da consulta online quando houver um atendimento agendado.
+- Gerenciamento dos profissionais e consultas por usuários com permissões administrativas.
+- Validação dos dados enviados pelo usuário para evitar registros inválidos.
+- Tratamento de erros durante as operações, informando ao usuário quando uma ação não puder ser concluída.
+- Atendimento voltado ao contexto de suporte psicológico online, com foco na conexão entre usuários e profissionais de psicologia.
 
 ### Fora do escopo
 
-- [Esse sistema não realiza consultas para clinicas ou especialistas de outras áreas da medicina, seu foco é exclusivamente a área da saude mental.]
-- [O sistema não irá realizar atendimentos como se fosse um psicólogo, ele é uma ferramenta de auxílio a busca e agendamento de consultas nada.]
-- [IO sistema não tem permissão para consultar fontes externas sem aprovação do PO.]
-- [Substituir informações oficiais caso houver conflito nos documentos que compõem sua base de dados.]
-- [Os pacientes não poderá acessar dados quanto as consultas de outros pacientes.]
-- [Os paciente não poderá cadastrar clinicas psicológicas ou psicólogos.]
+- Realização da consulta psicológica diretamente pelo sistema.
+- Substituição do profissional de psicologia por recursos automatizados ou inteligência artificial.
+- Diagnóstico, prescrição ou tratamento psicológico automatizado.
+- Atendimento presencial entre usuário e psicólogo.
+- Processamento ou gerenciamento de pagamentos e cobranças pelas consultas.
+- Integração com planos de saúde ou convênios.
+- Disponibilização de serviços médicos ou de outras especialidades da área da saúde.
+- Funcionalidades de emergência ou atendimento psicológico para situações de risco imediato.
+- Gerenciamento de prontuários clínicos completos dos pacientes.
+- Funcionalidades destinadas a usuários ou situações que estejam fora do propósito de conectar pessoas a profissionais de psicologia para atendimento online.
 
-*
+
 ## 5. Entradas, saídas e fluxo
 
 ### Entradas
