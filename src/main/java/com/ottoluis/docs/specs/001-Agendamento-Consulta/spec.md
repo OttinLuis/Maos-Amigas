@@ -19,6 +19,7 @@
 
 **Objetivo:** [Facilitar o acesso a profissionais de psicologia e tornar o processo de busca e agendamento de consultas psicológicas online mais simples, organizado e acessível.]  
 **Hipótese:** [Acreditamos que disponibilizar, em um único ambiente, informações sobre profissionais e recursos para agendamento ajudará os usuários a encontrar atendimento psicológico com maior facilidade e concluir o processo de marcação de consultas de forma mais eficiente.] 
+
 **Linha de base:** [Atualmente, o usuário pode precisar pesquisar profissionais em diferentes canais, verificar disponibilidade por meios distintos e realizar o agendamento diretamente com o profissional ou por plataformas separadas.]  
 **Sinais de sucesso:** [O usuário consegue localizar um profissional, consultar suas informações e realizar o agendamento de uma consulta seguindo um fluxo simples, sem depender de múltiplos canais para concluir essas etapas.]
 
