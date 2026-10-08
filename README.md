@@ -1,6 +1,6 @@
 # Mãos Amigas
 
-<img width="500" height="500" alt="logo" src="https://github.com/user-attachments/assets/399727cb-506d-46aa-8adf-047216edf170" />
+<img width="500" height="500" alt="a325c96e-bbeb-4c5c-b215-6eaad40cca04" src="https://github.com/user-attachments/assets/7c13447f-0e21-4ddc-8b16-de41ad0fa70f" />
 
 
 API REST desenvolvida com Java e Spring Boot para uma plataforma de apoio psicológico, conectando usuários a profissionais da área de psicologia e permitindo o gerenciamento de consultas.
