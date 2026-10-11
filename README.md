@@ -291,8 +291,6 @@ A disponibilidade desse endereço depende das dependências e das configuraçõe
 
 **Otto Luis**
 
-Estudante de Sistemas de Informação e desenvolvedor Java, com foco em backend, APIs REST e desenvolvimento de aplicações web.
-
 * GitHub: https://github.com/OttinLuis
 
 ## Licença
