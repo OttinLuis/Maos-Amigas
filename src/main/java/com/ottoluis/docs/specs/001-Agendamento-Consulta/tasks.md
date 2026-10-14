@@ -1,4 +1,4 @@
-Tarefas da funcionalidade — Mãos Amigas
+Tarefas de Agendamento-Consulta — Mãos Amigas
 
 Entrada: spec.md, plan.md e artefatos de apoio revisados.
 
@@ -70,9 +70,9 @@ Teste independente: agendar um horário livre e tentar agendar novamente o mesmo
 * [ ]	T032 [US3] Criar testes de integração do fluxo de consultas em src/test/java/com/ottoluis/MaosAmigas/Consulta/ConsultaControllerTest.java, cobrindo autenticação, dados inválidos e conflitos.
 * [ ]	T033 [US3] Integrar a apresentação das consultas ao frontend em src/pages/consulta/, respeitando os componentes e as rotas existentes.
 
-Fase 6 — História de usuário 4: Encontrar profissionais disponíveis e agendar consulta online
+Fase 6 — História de usuário prioritária: Encontrar profissionais disponíveis e agendar consulta online
 
-História de usuário: Como usuário que busca atendimento psicológico, quero encontrar profissionais disponíveis e agendar uma consulta online, para conseguir acesso ao atendimento psicológico de forma simples e organizada.
+Objetivo: Permitir que o usuário que busca atendimento psicológico, consiga encontrar profissionais disponíveis e agendar uma consulta online, para conseguir acesso ao atendimento psicológico de forma simples e organizada.
 
 Prioridade: P1
 
