@@ -1,6 +1,10 @@
 package com.ottoluis.MaosAmigas.exception;
 
+import com.ottoluis.MaosAmigas.exception.ErroResponse;
 import jakarta.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,79 +19,141 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final Logger log =
+            LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     // 404 - Recurso não encontrado
     @ExceptionHandler(RecursoNaoEncontradoException.class)
     public ResponseEntity<ErroResponse> handleNaoEncontrado(
-            RecursoNaoEncontradoException ex, HttpServletRequest request) {
+            RecursoNaoEncontradoException ex,
+            HttpServletRequest request) {
 
-        return construirResposta(HttpStatus.NOT_FOUND, "Não Encontrado",
-                ex.getMessage(), request, null);
+        return construirResposta(
+                HttpStatus.NOT_FOUND,
+                "Não Encontrado",
+                ex.getMessage(),
+                request,
+                null
+        );
     }
 
-    // 409 - Conflito (ex: e-mail duplicado)
+    // 409 - Recurso duplicado, como e-mail já cadastrado
     @ExceptionHandler(RecursoDuplicadoException.class)
     public ResponseEntity<ErroResponse> handleDuplicado(
-            RecursoDuplicadoException ex, HttpServletRequest request) {
+            RecursoDuplicadoException ex,
+            HttpServletRequest request) {
 
-        return construirResposta(HttpStatus.CONFLICT, "Conflito",
-                ex.getMessage(), request, null);
+        return construirResposta(
+                HttpStatus.CONFLICT,
+                "Conflito",
+                ex.getMessage(),
+                request,
+                null
+        );
     }
 
-    // 422 - Violação de regra de negócio
+    // 422 - Regra de negócio violada
     @ExceptionHandler(RegraDeNegocioException.class)
     public ResponseEntity<ErroResponse> handleRegraDeNegocio(
-            RegraDeNegocioException ex, HttpServletRequest request) {
+            RegraDeNegocioException ex,
+            HttpServletRequest request) {
 
-        return construirResposta(HttpStatus.UNPROCESSABLE_ENTITY, "Regra de Negócio Violada",
-                ex.getMessage(), request, null);
+        return construirResposta(
+                HttpStatus.UNPROCESSABLE_ENTITY,
+                "Regra de Negócio Violada",
+                ex.getMessage(),
+                request,
+                null
+        );
     }
 
-    // 400 - Erros de validação do @Valid (Bean Validation)
+    // 400 - Erros de validação do @Valid
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErroResponse> handleValidacao(
-            MethodArgumentNotValidException ex, HttpServletRequest request) {
+            MethodArgumentNotValidException ex,
+            HttpServletRequest request) {
 
-        List<String> detalhes = ex.getBindingResult().getFieldErrors()
+        List<String> detalhes = ex.getBindingResult()
+                .getFieldErrors()
                 .stream()
-                .map(erro -> erro.getField() + ": " + erro.getDefaultMessage())
+                .map(erro -> erro.getField() + ": "
+                        + erro.getDefaultMessage())
                 .toList();
 
-        return construirResposta(HttpStatus.BAD_REQUEST, "Erro de Validação",
-                "Um ou mais campos estão inválidos", request, detalhes);
+        return construirResposta(
+                HttpStatus.BAD_REQUEST,
+                "Erro de Validação",
+                "Um ou mais campos estão inválidos",
+                request,
+                detalhes
+        );
     }
 
-    // 409 - Violação de integridade no banco (ex: e-mail único, chave estrangeira)
+    // 409 - Violação de integridade do banco de dados
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErroResponse> handleIntegridade(
-            DataIntegrityViolationException ex, HttpServletRequest request) {
+            DataIntegrityViolationException ex,
+            HttpServletRequest request) {
 
-        return construirResposta(HttpStatus.CONFLICT, "Conflito de Dados",
+        log.warn(
+                "Violação de integridade na requisição {} {}: {}",
+                request.getMethod(),
+                request.getRequestURI(),
+                ex.getMessage()
+        );
+
+        return construirResposta(
+                HttpStatus.CONFLICT,
+                "Conflito de Dados",
                 "A operação viola uma restrição de integridade do banco de dados",
-                request, null);
+                request,
+                null
+        );
     }
 
-    // 405 - Método HTTP não suportado (ex: PATCH numa rota que só aceita PUT)
+    // 405 - Método HTTP não suportado
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErroResponse> handleMetodoNaoSuportado(
-            HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+            HttpRequestMethodNotSupportedException ex,
+            HttpServletRequest request) {
 
-        return construirResposta(HttpStatus.METHOD_NOT_ALLOWED, "Método Não Permitido",
-                ex.getMessage(), request, null);
+        return construirResposta(
+                HttpStatus.METHOD_NOT_ALLOWED,
+                "Método Não Permitido",
+                ex.getMessage(),
+                request,
+                null
+        );
     }
 
-    // 500 - Qualquer outra exceção não tratada (fallback de segurança)
+    // 500 - Exceções inesperadas
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErroResponse> handleGenerico(
-            Exception ex, HttpServletRequest request) {
+            Exception ex,
+            HttpServletRequest request) {
 
-        return construirResposta(HttpStatus.INTERNAL_SERVER_ERROR, "Erro Interno",
+        log.error(
+                "Erro inesperado na requisição {} {}",
+                request.getMethod(),
+                request.getRequestURI(),
+                ex
+        );
+
+        return construirResposta(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Erro Interno",
                 "Ocorreu um erro inesperado. Tente novamente mais tarde.",
-                request, null);
+                request,
+                null
+        );
     }
 
     private ResponseEntity<ErroResponse> construirResposta(
-            HttpStatus status, String erro, String mensagem,
-            HttpServletRequest request, List<String> detalhes) {
+            HttpStatus status,
+            String erro,
+            String mensagem,
+            HttpServletRequest request,
+            List<String> detalhes) {
 
         ErroResponse body = new ErroResponse(
                 LocalDateTime.now(),
@@ -98,6 +164,9 @@ public class GlobalExceptionHandler {
                 detalhes
         );
 
-        return ResponseEntity.status(status).body(body);
+        return ResponseEntity
+                .status(status)
+                .body(body);
     }
 }
+

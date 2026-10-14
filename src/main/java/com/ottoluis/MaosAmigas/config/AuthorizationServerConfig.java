@@ -1,9 +1,13 @@
 package com.ottoluis.MaosAmigas.config;
 
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.KeyFactory;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
@@ -63,6 +67,12 @@ public class AuthorizationServerConfig {
 
 	@Value("${security.jwt.duration}")
 	private Integer jwtDurationSeconds;
+
+    @Value("${security.jwt.private-key-path:/run/secrets/jwt-private.pem}")
+    private String jwtPrivateKeyPath;
+
+    @Value("${security.jwt.public-key-path:/run/secrets/jwt-public.pem}")
+    private String jwtPublicKeyPath;
 
 	@Autowired
 	private UserDetailsService userDetailsService;
@@ -168,29 +178,51 @@ public class AuthorizationServerConfig {
 		return OAuth2AuthorizationServerConfiguration.jwtDecoder(jwkSource);
 	}
 
+
 	@Bean
 	public JWKSource<SecurityContext> jwkSource() {
-		RSAKey rsaKey = generateRsa();
+		RSAKey rsaKey = loadRsaKey();
 		JWKSet jwkSet = new JWKSet(rsaKey);
 		return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
 	}
 
-	private static RSAKey generateRsa() {
-		KeyPair keyPair = generateRsaKey();
-		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-		return new RSAKey.Builder(publicKey).privateKey(privateKey).keyID(UUID.randomUUID().toString()).build();
+	private RSAKey loadRsaKey() {
+		try {
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+			String privatePem = Files.readString(Path.of(jwtPrivateKeyPath));
+			String publicPem = Files.readString(Path.of(jwtPublicKeyPath));
+
+			byte[] privateBytes = decodePem(privatePem, "PRIVATE KEY");
+			byte[] publicBytes = decodePem(publicPem, "PUBLIC KEY");
+
+			RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(
+					new PKCS8EncodedKeySpec(privateBytes)
+			);
+
+			RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(
+					new X509EncodedKeySpec(publicBytes)
+			);
+
+			return new RSAKey.Builder(publicKey)
+					.privateKey(privateKey)
+					.keyID("maos-amigas-rsa-key")
+					.build();
+		} catch (Exception ex) {
+			throw new IllegalStateException(
+					"Não foi possível carregar as chaves RSA do JWT. Verifique os arquivos configurados.",
+					ex
+			);
+		}
 	}
 
-	private static KeyPair generateRsaKey() {
-		KeyPair keyPair;
-		try {
-			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-			keyPairGenerator.initialize(2048);
-			keyPair = keyPairGenerator.generateKeyPair();
-		} catch (Exception ex) {
-			throw new IllegalStateException(ex);
-		}
-		return keyPair;
+	private byte[] decodePem(String pem, String type) {
+		String content = pem
+				.replace("-----BEGIN " + type + "-----", "")
+				.replace("-----END " + type + "-----", "")
+				.replaceAll("\\s", "");
+
+		return Base64.getDecoder().decode(content);
 	}
+
 }

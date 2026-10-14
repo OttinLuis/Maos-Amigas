@@ -10,6 +10,8 @@ import java.util.List;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Usuario findByEmail(String email);
+    boolean existsByEmail(String email);
+    boolean existsByCpf(String cpf);
 
     @Query(nativeQuery = true, value = """
           SELECT usuario_tb.email AS username, 

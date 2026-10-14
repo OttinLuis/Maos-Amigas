@@ -188,14 +188,14 @@ public class    Usuario implements UserDetails {
         roles.add(role);
 
     }
-    public boolean hasRole(String roleNome){
-        for (Role role : roles){
-            if (role.getAuthority().equals(roleNome));
-            return true;
+    public boolean hasRole(String roleNome) {
+        for (Role role : roles) {
+            if (role.getAuthority().equals(roleNome)) {
+                return true;
+            }
         }
+
         return false;
-
-
     }
 
     @Override

@@ -1,0 +1,10 @@
+$kind: http-request
+url: http://localhost:8080/ia/chat
+method: POST
+body:
+  type: json
+  content: |-
+    {
+      "mensagem": "Quero agendar uma consulta"
+    }
+order: 3675264677345240

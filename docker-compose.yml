@@ -32,6 +32,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/MaosAmigas
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: "123"
+      GROQ_API_KEY: ${GROQ_API_KEY}
 
       CLIENT_ID: myclientid
       CLIENT_SECRET: myclientsecret
@@ -39,6 +40,9 @@ services:
 
       CORS_ORIGINS: http://localhost:3000,http://localhost:5173
 
+    volumes:
+      - ./.secrets/jwt-private.pem:/run/secrets/jwt-private.pem:ro
+      - ./.secrets/jwt-public.pem:/run/secrets/jwt-public.pem:ro
     depends_on:
       postgres:
         condition: service_healthy

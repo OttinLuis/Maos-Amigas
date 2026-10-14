@@ -1,0 +1,678 @@
+package com.ottoluis.MaosAmigas.ia;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+@Component
+public class GroqClient {
+
+    private final WebClient webClient;
+    private final ObjectMapper objectMapper;
+    private final IaToolService iaToolService;
+
+    private final Map<String, List<Map<String, Object>>> conversas =
+            new ConcurrentHashMap<>();
+
+    @Value("${groq.api.url}")
+    private String apiUrl;
+
+    @Value("${groq.api.key}")
+    private String apiKey;
+
+    @Value("${groq.model}")
+    private String model;
+
+    public GroqClient(
+            WebClient.Builder webClientBuilder,
+            ObjectMapper objectMapper,
+            IaToolService iaToolService
+    ) {
+        this.webClient = webClientBuilder.build();
+        this.objectMapper = objectMapper;
+        this.iaToolService = iaToolService;
+    }
+
+    public String conversar(String mensagem) {
+
+        if (mensagem == null || mensagem.isBlank()) {
+            throw new IllegalArgumentException(
+                    "A mensagem não pode estar vazia."
+            );
+        }
+
+        String identificadorUsuario =
+                obterIdentificadorUsuario();
+
+        List<Map<String, Object>> messages =
+                conversas.computeIfAbsent(
+                        identificadorUsuario,
+                        key -> criarNovaConversa()
+                );
+
+        synchronized (messages) {
+
+            messages.add(Map.of(
+                    "role", "user",
+                    "content", mensagem
+            ));
+
+            try {
+
+                for (int tentativa = 0; tentativa < 5; tentativa++) {
+
+                    Map<String, Object> body = Map.of(
+                            "model", model,
+                            "messages", messages,
+                            "tools", criarFerramentas(),
+                            "tool_choice", "auto",
+                            "temperature", 0.3,
+                            "max_completion_tokens", 1000
+                    );
+
+                    Map response = chamarGroq(body);
+
+                    JsonNode json =
+                            objectMapper.valueToTree(response);
+
+                    JsonNode choices =
+                            json.path("choices");
+
+                    if (!choices.isArray() || choices.isEmpty()) {
+                        throw new RuntimeException(
+                                "A API do Groq não retornou nenhuma escolha. "
+                                        + "Resposta: " + json
+                        );
+                    }
+
+                    JsonNode message =
+                            choices.get(0).path("message");
+
+                    JsonNode toolCalls =
+                            message.path("tool_calls");
+
+                    if (!toolCalls.isArray()
+                            || toolCalls.isEmpty()) {
+
+                        JsonNode content =
+                                message.path("content");
+
+                        if (content.isMissingNode()
+                                || content.isNull()) {
+
+                            throw new RuntimeException(
+                                    "O Groq não retornou conteúdo. "
+                                            + "Resposta: " + json
+                            );
+                        }
+
+                        String resposta =
+                                content.asText();
+
+                        if (resposta.isBlank()) {
+                            throw new RuntimeException(
+                                    "O Groq retornou uma resposta vazia."
+                            );
+                        }
+
+                        messages.add(
+                                objectMapper.convertValue(
+                                        message,
+                                        Map.class
+                                )
+                        );
+
+                        limitarHistorico(messages);
+
+                        return resposta;
+                    }
+
+                    Map<String, Object> assistantMessage =
+                            objectMapper.convertValue(
+                                    message,
+                                    Map.class
+                            );
+
+                    messages.add(assistantMessage);
+
+                    for (JsonNode toolCall : toolCalls) {
+
+                        String toolCallId =
+                                toolCall
+                                        .path("id")
+                                        .asText();
+
+                        String toolName =
+                                toolCall
+                                        .path("function")
+                                        .path("name")
+                                        .asText();
+
+                        String arguments =
+                                toolCall
+                                        .path("function")
+                                        .path("arguments")
+                                        .asText();
+
+                        String resultado =
+                                executarFerramenta(
+                                        toolName,
+                                        arguments
+                                );
+
+                        messages.add(Map.of(
+                                "role", "tool",
+                                "tool_call_id", toolCallId,
+                                "name", toolName,
+                                "content", resultado
+                        ));
+                    }
+                }
+
+                throw new RuntimeException(
+                        "A IA atingiu o limite de chamadas "
+                                + "de ferramentas."
+                );
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
+                throw new RuntimeException(
+                        "Erro ao comunicar com a API do Groq: "
+                                + e.getMessage(),
+                        e
+                );
+            }
+        }
+    }
+
+    private List<Map<String, Object>> criarNovaConversa() {
+
+        List<Map<String, Object>> messages =
+                new ArrayList<>();
+
+        messages.add(Map.of(
+                "role", "system",
+                "content", """
+                        Você é o assistente de agendamento do Mãos Amigas.
+
+                        Sua função é ajudar o usuário exclusivamente com
+                        agendamento de consultas psicológicas dentro da
+                        plataforma.
+
+                        Você possui acesso a ferramentas que consultam os
+                        dados reais do sistema.
+
+                        REGRAS:
+
+                        1. Nunca invente psicólogos.
+
+                        2. Nunca invente disponibilidade.
+
+                        3. Nunca invente consultas.
+
+                        4. Quando precisar saber quais psicólogos estão
+                           cadastrados, utilize buscarPsicologos.
+
+                        5. Quando o usuário informar psicólogo, data e horário
+                           e quiser saber se existe disponibilidade, utilize
+                           verificarDisponibilidade.
+
+                        6. Utilize somente informações retornadas pelas
+                           ferramentas.
+
+                        7. Nunca diga que uma consulta foi agendada sem que
+                           o sistema confirme a criação.
+
+                        8. Não ofereça atendimento psicológico.
+
+                        9. Não faça diagnósticos.
+
+                        10. Não ofereça tratamentos.
+
+                        11. Não responda sobre pagamentos.
+
+                        12. Não responda sobre avaliações de psicólogos.
+
+                        13. Não responda sobre localização.
+
+                        14. Se o usuário perguntar algo fora do agendamento,
+                            informe educadamente que você é responsável apenas
+                            pelo agendamento de consultas.
+
+                        15. Seja claro, objetivo e natural.
+
+                        16. Se faltar alguma informação necessária para usar
+                            uma ferramenta, pergunte ao usuário.
+
+                        17. true significa que o horário está disponível.
+
+                        18. false significa que o horário está ocupado.
+
+                        19. Antes de criar uma consulta, confirme
+                            explicitamente com o usuário.
+
+                        20. A palavra "sim", "pode", "confirmo" ou expressão
+                            equivalente só deve ser considerada confirmação
+                            quando existir no histórico uma solicitação de
+                            agendamento pendente imediatamente anterior.
+
+                        21. Nunca crie uma consulta apenas porque o usuário
+                            mencionou uma data e horário.
+
+                        22. Depois de verificar a disponibilidade, informe
+                            claramente o psicólogo, a data e o horário antes
+                            de solicitar confirmação.
+
+                        23. Só utilize criarConsulta depois de uma confirmação
+                            explícita do usuário.
+
+                        24. Ao chamar criarConsulta, utilize exatamente os
+                            dados que foram confirmados pelo usuário.
+
+                        25. Nunca altere a data, horário ou psicólogo durante
+                            a criação da consulta.
+                                                26. Quando o usuário quiser ver horários disponíveis,
+                            utilize listarHorariosDisponiveis.
+                        27. Ofereça somente horários retornados por essa ferramenta.
+                        28. Cada consulta dura 50 minutos, dentro do período
+                            de segunda a sexta-feira, das 08:00 às 18:00.
+                        29. Se não houver horários disponíveis na data solicitada,
+                            informe isso e pergunte se deseja consultar outra data.
+                        30. Não invente horários nem considere um horário livre
+                            sem consultar as ferramentas do sistema.
+"""
+        ));
+
+        return messages;
+    }
+
+    private String obterIdentificadorUsuario() {
+
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+        if (authentication != null
+                && authentication.isAuthenticated()
+                && authentication.getName() != null) {
+
+            return authentication.getName();
+        }
+
+        return "usuario-anonimo";
+    }
+
+    private Map<String, Object> chamarGroq(
+            Map<String, Object> body
+    ) {
+
+        return webClient
+                .post()
+                .uri(apiUrl)
+                .header(
+                        "Authorization",
+                        "Bearer " + apiKey
+                )
+                .header(
+                        "Content-Type",
+                        "application/json"
+                )
+                .bodyValue(body)
+                .retrieve()
+                .onStatus(
+                        status -> status.isError(),
+                        response -> response
+                                .bodyToMono(String.class)
+                                .map(errorBody ->
+                                        new RuntimeException(
+                                                "Erro da API Groq. Status: "
+                                                        + response.statusCode()
+                                                        + " | Resposta: "
+                                                        + errorBody
+                                        )
+                                )
+                )
+                .bodyToMono(Map.class)
+                .block();
+    }
+
+    private List<Map<String, Object>> criarFerramentas() {
+
+        Map<String, Object> buscarPsicologos =
+                Map.of(
+                        "type", "function",
+                        "function", Map.of(
+                                "name", "buscarPsicologos",
+                                "description",
+                                "Busca todos os psicólogos cadastrados "
+                                        + "na plataforma Mãos Amigas.",
+                                "parameters", Map.of(
+                                        "type", "object",
+                                        "properties", Map.of(),
+                                        "required", List.of()
+                                )
+                        )
+                );
+
+        Map<String, Object> listarHorariosDisponiveis =
+                Map.of(
+                        "type", "function",
+                        "function", Map.of(
+                                "name", "listarHorariosDisponiveis",
+                                "description",
+                                "Lista os horários realmente disponíveis "
+                                        + "para um psicólogo em uma data. "
+                                        + "Use sempre esta ferramenta antes "
+                                        + "de oferecer horários.",
+                                "parameters", Map.of(
+                                        "type", "object",
+                                        "properties", Map.of(
+                                                "psicologoId", Map.of(
+                                                        "type", "integer",
+                                                        "description",
+                                                        "ID do psicólogo."
+                                                ),
+                                                "data", Map.of(
+                                                        "type", "string",
+                                                        "description",
+                                                        "Data no formato YYYY-MM-DD."
+                                                )
+                                        ),
+                                        "required", List.of(
+                                                "psicologoId", "data"
+                                        )
+                                )
+                        )
+                );
+
+        Map<String, Object> verificarDisponibilidade =
+                Map.of(
+                        "type", "function",
+                        "function", Map.of(
+                                "name",
+                                "verificarDisponibilidade",
+                                "description",
+                                "Verifica se um psicólogo possui "
+                                        + "disponibilidade em determinada "
+                                        + "data e horário.",
+                                "parameters", Map.of(
+                                        "type", "object",
+                                        "properties", Map.of(
+                                                "psicologoId", Map.of(
+                                                        "type", "integer",
+                                                        "description",
+                                                        "ID do psicólogo."
+                                                ),
+                                                "data", Map.of(
+                                                        "type", "string",
+                                                        "description",
+                                                        "Data no formato "
+                                                                + "YYYY-MM-DD."
+                                                ),
+                                                "hora", Map.of(
+                                                        "type", "string",
+                                                        "description",
+                                                        "Horário no formato "
+                                                                + "HH:mm:ss."
+                                                )
+                                        ),
+                                        "required", List.of(
+                                                "psicologoId",
+                                                "data",
+                                                "hora"
+                                        )
+                                )
+                        )
+                );
+
+        Map<String, Object> criarConsulta =
+                Map.of(
+                        "type", "function",
+                        "function", Map.of(
+                                "name",
+                                "criarConsulta",
+                                "description",
+                                "Cria uma consulta psicológica para o "
+                                        + "usuário autenticado. Só deve ser "
+                                        + "utilizada após confirmação explícita "
+                                        + "do usuário.",
+                                "parameters", Map.of(
+                                        "type", "object",
+                                        "properties", Map.of(
+                                                "psicologoId", Map.of(
+                                                        "type", "integer",
+                                                        "description",
+                                                        "ID do psicólogo."
+                                                ),
+                                                "data", Map.of(
+                                                        "type", "string",
+                                                        "description",
+                                                        "Data no formato "
+                                                                + "YYYY-MM-DD."
+                                                ),
+                                                "hora", Map.of(
+                                                        "type", "string",
+                                                        "description",
+                                                        "Horário no formato "
+                                                                + "HH:mm:ss."
+                                                ),
+                                                "observacao", Map.of(
+                                                        "type", "string",
+                                                        "description",
+                                                        "Observação opcional "
+                                                                + "da consulta."
+                                                )
+                                        ),
+                                        "required", List.of(
+                                                "psicologoId",
+                                                "data",
+                                                "hora"
+                                        )
+                                )
+                        )
+                );
+
+        return List.of(
+                buscarPsicologos,
+                listarHorariosDisponiveis,
+                verificarDisponibilidade,
+                criarConsulta
+        );
+    }
+
+    private String executarFerramenta(
+            String nome,
+            String argumentos
+    ) {
+
+        try {
+
+            JsonNode args =
+                    objectMapper.readTree(argumentos);
+
+            switch (nome) {
+
+                case "buscarPsicologos":
+
+                    return objectMapper.writeValueAsString(
+                            iaToolService
+                                    .buscarPsicologos()
+                                    .stream()
+                                    .map(psicologo ->
+                                            Map.of(
+                                                    "id",
+                                                    psicologo.getId(),
+
+                                                    "nome",
+                                                    psicologo.getNomePsicologa(),
+
+                                                    "crp",
+                                                    psicologo.getCrp(),
+
+                                                    "especialidade",
+                                                    psicologo.getEspecialidade(),
+
+                                                    "sobreMim",
+                                                    psicologo.getSobreMim()
+                                            )
+                                    )
+                                    .toList()
+                    );
+
+                case "listarHorariosDisponiveis":
+                    Long psicologoIdHorarios =
+                            args.path("psicologoId").asLong();
+
+                    LocalDate dataHorarios =
+                            LocalDate.parse(
+                                    args.path("data").asText()
+                            );
+
+                    List<String> horarios =
+                            iaToolService.listarHorariosDisponiveis(
+                                    psicologoIdHorarios,
+                                    dataHorarios
+                            )
+                            .stream()
+                            .map(LocalTime::toString)
+                            .toList();
+
+                    return objectMapper.writeValueAsString(
+                            Map.of(
+                                    "psicologoId", psicologoIdHorarios,
+                                    "data", dataHorarios.toString(),
+                                    "duracaoMinutos", 50,
+                                    "horariosDisponiveis", horarios
+                            )
+                    );
+
+                case "verificarDisponibilidade":
+
+                    Long psicologoId =
+                            args.path("psicologoId").asLong();
+
+                    LocalDate data =
+                            LocalDate.parse(
+                                    args.path("data").asText()
+                            );
+
+                    LocalTime hora =
+                            LocalTime.parse(
+                                    args.path("hora").asText()
+                            );
+
+                    boolean disponivel =
+                            iaToolService.verificarDisponibilidade(
+                                    psicologoId,
+                                    data,
+                                    hora
+                            );
+
+                    return objectMapper.writeValueAsString(
+                            Map.of(
+                                    "psicologoId", psicologoId,
+                                    "data", data.toString(),
+                                    "hora", hora.toString(),
+                                    "disponivel", disponivel
+                            )
+                    );
+
+                case "criarConsulta":
+
+                    Long psicologoIdConsulta =
+                            args.path("psicologoId").asLong();
+
+                    LocalDate dataConsulta =
+                            LocalDate.parse(
+                                    args.path("data").asText()
+                            );
+
+                    LocalTime horaConsulta =
+                            LocalTime.parse(
+                                    args.path("hora").asText()
+                            );
+
+                    String observacao =
+                            args.has("observacao")
+                                    && !args.path("observacao")
+                                    .isNull()
+                                    ? args.path("observacao").asText()
+                                    : null;
+
+                    var consulta =
+                            iaToolService.criarConsulta(
+                                    psicologoIdConsulta,
+                                    dataConsulta,
+                                    horaConsulta,
+                                    observacao
+                            );
+
+                    return objectMapper.writeValueAsString(
+                            Map.of(
+                                    "sucesso", true,
+                                    "mensagem",
+                                    "Consulta criada com sucesso.",
+                                    "consultaId",
+                                    consulta.getId(),
+                                    "psicologoId",
+                                    consulta.getPsicologo().getId(),
+                                    "data",
+                                    consulta.getData().toString(),
+                                    "hora",
+                                    consulta.getHora().toString(),
+                                    "status",
+                                    consulta.getStatus().name()
+                            )
+                    );
+
+                default:
+
+                    return objectMapper.writeValueAsString(
+                            Map.of(
+                                    "erro",
+                                    "Ferramenta não encontrada: "
+                                            + nome
+                            )
+                    );
+            }
+
+        } catch (Exception e) {
+
+            return objectMapper.writeValueAsString(
+                    Map.of(
+                            "erro",
+                            "Não foi possível executar "
+                                    + "a ferramenta.",
+                            "detalhes",
+                            e.getMessage()
+                    )
+            );
+        }
+    }
+
+    private void limitarHistorico(
+            List<Map<String, Object>> messages
+    ) {
+
+        int limite = 30;
+
+        while (messages.size() > limite) {
+            messages.remove(1);
+        }
+    }
+}
+
