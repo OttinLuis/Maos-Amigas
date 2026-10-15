@@ -4,9 +4,7 @@
 
 O Mãos Amigas é uma plataforma de suporte psicológico online que conecta usuários a psicólogos e permite o gerenciamento de consultas psicológicas.
 
-A aplicação é disponibilizada por meio de uma API REST desenvolvida em Java com Spring Boot. O sistema utiliza autenticação e autorização para proteger os recursos e permite que usuários consultem psicólogos
-
-e realizem o agendamento de consultas.
+A aplicação é disponibilizada por meio de uma API REST desenvolvida em Java com Spring Boot. O sistema utiliza autenticação e autorização para proteger os recursos e permite que usuários consultem psicólogos e realizem o agendamento de consultas.
 
 A aplicação é executada em ambiente conteinerizado utilizando Docker Compose, com o gerenciamento dos containers realizado pelo Colima no ambiente de desenvolvimento.
 
